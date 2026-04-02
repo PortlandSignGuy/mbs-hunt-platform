@@ -12,8 +12,8 @@ export default function HuntPage() {
     return (
       <div className="text-center py-20">
         <div className="text-5xl mb-4">🔍</div>
-        <h1 className="font-display text-2xl font-bold text-surface-800 mb-2">Hunt not found</h1>
-        <Link to="/home" className="text-primary-600 hover:underline">Back to Home</Link>
+        <h1 className="font-display text-2xl text-surface-800 mb-2">Hunt not found</h1>
+        <Link to="/home" className="text-primary-600 hover:underline font-bold">Back to Home</Link>
       </div>
     );
   }
@@ -30,12 +30,12 @@ export default function HuntPage() {
   return (
     <div className="space-y-8">
       {/* Hunt header */}
-      <div className="bg-white rounded-card shadow-sm border border-surface-200 p-6">
+      <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-6">
         <div className="flex items-start gap-4">
           <span className="text-5xl">{hunt.emoji || '🎨'}</span>
           <div className="flex-1">
-            <h1 className="font-display text-3xl font-bold text-surface-800">{hunt.name}</h1>
-            <p className="text-surface-500 mt-1">{hunt.city}</p>
+            <h1 className="font-display text-3xl text-primary-600">{hunt.name}</h1>
+            <p className="text-surface-500 mt-1 font-semibold">{hunt.city}</p>
             {hunt.description && (
               <p className="text-surface-600 mt-3">{hunt.description}</p>
             )}
@@ -44,13 +44,13 @@ export default function HuntPage() {
 
         {/* Progress bar */}
         <div className="mt-6">
-          <div className="flex justify-between text-sm font-medium mb-2">
+          <div className="flex justify-between text-sm font-bold mb-2">
             <span className="text-surface-600">{collectedCount} of {totalStops} collected</span>
             <span className="text-primary-600">{Math.round(progressPct)}%</span>
           </div>
-          <div className="h-4 bg-surface-100 rounded-full overflow-hidden">
+          <div className="h-4 bg-cream-300 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-primary-400 via-joy-400 to-accent-400 rounded-full transition-all duration-700"
+              className="h-full bg-gradient-to-r from-primary-400 via-secondary-400 to-nature-400 rounded-full transition-all duration-700"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -59,16 +59,16 @@ export default function HuntPage() {
         {allCollected && (
           <Link
             to={`/hunt/${huntSlug}/reward`}
-            className="inline-block mt-4 bg-gradient-to-r from-accent-400 to-accent-500 text-white font-display font-bold px-6 py-2.5 rounded-button shadow-md hover:shadow-lg transition-all no-underline animate-bounce"
+            className="inline-block mt-4 bg-secondary-400 text-surface-900 font-display text-lg px-6 py-2.5 rounded-button shadow-md hover:bg-secondary-500 hover:shadow-lg transition-all no-underline animate-bounce"
           >
-            🎉 Claim Your Reward!
+            Claim Your Reward!
           </Link>
         )}
       </div>
 
       {/* Stops grid */}
       <section>
-        <h2 className="font-display text-xl font-bold text-surface-800 mb-4">Stops</h2>
+        <h2 className="font-display text-xl text-surface-800 mb-4">Stops</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {stops.map((stop, i) => {
             const found = collectedIds.has(stop.id);
@@ -77,17 +77,17 @@ export default function HuntPage() {
                 key={stop.id}
                 className={`relative rounded-card border-2 p-5 transition-all ${
                   found
-                    ? 'bg-nature-50 border-nature-300 shadow-sm'
-                    : 'bg-white border-surface-200 opacity-75'
+                    ? 'bg-nature-50 border-nature-400 shadow-sm'
+                    : 'bg-cream-50 border-cream-400 opacity-75'
                 }`}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                    found ? 'bg-nature-500 text-white' : 'bg-surface-200 text-surface-500'
+                    found ? 'bg-nature-400 text-white' : 'bg-cream-300 text-surface-500'
                   }`}>
                     {found ? '✓' : i + 1}
                   </span>
-                  <h3 className="font-display font-bold text-surface-800">{stop.name}</h3>
+                  <h3 className="font-display text-surface-800">{stop.name}</h3>
                 </div>
                 {stop.hint && (
                   <p className="text-surface-500 text-sm">{stop.hint}</p>
@@ -108,7 +108,7 @@ export default function HuntPage() {
         <div className="text-center">
           <Link
             to={`/hunt/${huntSlug}/collection`}
-            className="text-primary-600 hover:text-primary-700 font-medium hover:underline"
+            className="text-primary-600 hover:text-primary-700 font-bold hover:underline"
           >
             View your full collection →
           </Link>

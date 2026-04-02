@@ -21,11 +21,11 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-md mx-auto mt-12">
-      <div className="bg-white rounded-card shadow-lg border border-surface-200 p-8">
+      <div className="bg-cream-50 rounded-card shadow-lg border border-cream-400 p-8">
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">🎯</div>
-          <h1 className="font-display text-3xl font-bold text-surface-800 mb-2">
-            Join the Hunt
+          <div className="text-5xl mb-3 animate-float">🎯</div>
+          <h1 className="font-display text-3xl text-primary-600 mb-2">
+            Join the Hunt!
           </h1>
           <p className="text-surface-500">
             Register to start collecting public art photos and unlock rewards!
@@ -34,7 +34,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-surface-700 mb-1.5">
+            <label htmlFor="name" className="block text-sm font-bold text-surface-700 mb-1.5">
               Your Name
             </label>
             <input
@@ -44,12 +44,12 @@ export default function RegisterPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               required
-              className="w-full px-4 py-2.5 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-surface-800 placeholder:text-surface-400"
+              className="w-full px-4 py-2.5 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-surface-800 placeholder:text-surface-400"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-surface-700 mb-1.5">
+            <label htmlFor="email" className="block text-sm font-bold text-surface-700 mb-1.5">
               Email Address
             </label>
             <input
@@ -59,13 +59,13 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
-              className="w-full px-4 py-2.5 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-surface-800 placeholder:text-surface-400"
+              className="w-full px-4 py-2.5 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-surface-800 placeholder:text-surface-400"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-primary-500 to-primary-600 text-white font-display font-bold text-lg py-3 rounded-button shadow-md hover:shadow-lg hover:from-primary-600 hover:to-primary-700 transition-all"
+            className="w-full bg-primary-500 text-white font-display text-lg py-3 rounded-button shadow-md hover:bg-primary-600 hover:shadow-lg transition-all"
           >
             Let's Go!
           </button>

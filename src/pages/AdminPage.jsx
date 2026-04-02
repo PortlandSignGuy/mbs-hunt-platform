@@ -7,6 +7,7 @@ export default function AdminPage() {
   const hunts = useHuntStore((s) => s.hunts);
   const addHunt = useHuntStore((s) => s.addHunt);
   const removeHunt = useHuntStore((s) => s.removeHunt);
+  const publishHunt = useHuntStore((s) => s.publishHunt);
   const addStop = useHuntStore((s) => s.addStop);
   const addToast = useUiStore((s) => s.addToast);
 
@@ -58,13 +59,18 @@ export default function AdminPage() {
     setAddingStopTo(null);
   }
 
+  function handlePublish(huntId) {
+    publishHunt(huntId);
+    addToast({ type: 'success', message: 'Hunt published!' });
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl font-bold text-surface-800">Admin</h1>
+        <h1 className="font-display text-3xl text-primary-600">Admin</h1>
         <button
           onClick={() => setShowNewHunt(true)}
-          className="bg-primary-500 text-white font-semibold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors"
+          className="bg-primary-500 text-white font-bold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors"
         >
           + New Hunt
         </button>
@@ -72,43 +78,43 @@ export default function AdminPage() {
 
       {/* New hunt form */}
       {showNewHunt && (
-        <form onSubmit={handleCreateHunt} className="bg-white rounded-card shadow-sm border border-surface-200 p-6 space-y-4">
-          <h2 className="font-display text-xl font-bold text-surface-800">Create Hunt</h2>
+        <form onSubmit={handleCreateHunt} className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-6 space-y-4">
+          <h2 className="font-display text-xl text-surface-800">Create Hunt</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="block text-sm font-semibold text-surface-700 mb-1">Hunt Name</label>
+              <label className="block text-sm font-bold text-surface-700 mb-1">Hunt Name</label>
               <input
                 value={huntName}
                 onChange={(e) => setHuntName(e.target.value)}
                 placeholder="Portland Art Walk"
                 required
-                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+                className="w-full px-3 py-2 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-surface-700 mb-1">City</label>
+              <label className="block text-sm font-bold text-surface-700 mb-1">City</label>
               <input
                 value={huntCity}
                 onChange={(e) => setHuntCity(e.target.value)}
                 placeholder="Portland, OR"
                 required
-                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+                className="w-full px-3 py-2 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-surface-700 mb-1">Emoji</label>
+              <label className="block text-sm font-bold text-surface-700 mb-1">Emoji</label>
               <input
                 value={huntEmoji}
                 onChange={(e) => setHuntEmoji(e.target.value)}
-                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+                className="w-full px-3 py-2 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
               />
             </div>
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="bg-primary-500 text-white font-semibold px-5 py-2 rounded-button hover:bg-primary-600 transition-colors">
+            <button type="submit" className="bg-primary-500 text-white font-bold px-5 py-2 rounded-button hover:bg-primary-600 transition-colors">
               Create
             </button>
-            <button type="button" onClick={() => setShowNewHunt(false)} className="text-surface-500 hover:text-surface-700 font-medium px-4 py-2">
+            <button type="button" onClick={() => setShowNewHunt(false)} className="text-surface-500 hover:text-surface-700 font-bold px-4 py-2">
               Cancel
             </button>
           </div>
@@ -117,28 +123,39 @@ export default function AdminPage() {
 
       {/* Hunt list */}
       {hunts.length === 0 ? (
-        <div className="bg-white rounded-card shadow-sm border border-surface-200 p-12 text-center">
+        <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-12 text-center">
           <div className="text-5xl mb-4">📋</div>
-          <p className="text-surface-500 text-lg">No hunts created yet.</p>
+          <p className="text-surface-500 text-lg font-semibold">No hunts created yet.</p>
+          <p className="text-surface-400 text-sm mt-1">Click "+ New Hunt" to get started!</p>
         </div>
       ) : (
         <div className="space-y-6">
           {hunts.map((hunt) => (
-            <div key={hunt.id} className="bg-white rounded-card shadow-sm border border-surface-200 p-6">
+            <div key={hunt.id} className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{hunt.emoji}</span>
                   <div>
-                    <h3 className="font-display font-bold text-lg text-surface-800">{hunt.name}</h3>
+                    <h3 className="font-display text-lg text-surface-800">{hunt.name}</h3>
                     <p className="text-surface-500 text-sm">{hunt.city} — {hunt.stops?.length || 0} stops</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-badge ${
-                    hunt.status === 'published' ? 'bg-nature-100 text-nature-700' : 'bg-surface-100 text-surface-600'
+                  <span className={`text-xs font-bold px-2.5 py-1 rounded-badge ${
+                    hunt.status === 'published'
+                      ? 'bg-nature-100 text-nature-700'
+                      : 'bg-cream-300 text-surface-600'
                   }`}>
                     {hunt.status}
                   </span>
+                  {hunt.status === 'draft' && (
+                    <button
+                      onClick={() => handlePublish(hunt.id)}
+                      className="text-primary-600 hover:text-primary-700 text-sm font-bold px-2 py-1 transition-colors"
+                    >
+                      Publish
+                    </button>
+                  )}
                   <button
                     onClick={() => removeHunt(hunt.id)}
                     className="text-surface-400 hover:text-danger text-sm px-2 py-1 transition-colors"
@@ -151,11 +168,11 @@ export default function AdminPage() {
               {/* Stops */}
               <div className="space-y-2 mb-4">
                 {hunt.stops?.map((stop, i) => (
-                  <div key={stop.id} className="flex items-center gap-3 bg-surface-50 rounded-lg px-4 py-2">
+                  <div key={stop.id} className="flex items-center gap-3 bg-cream-200 rounded-lg px-4 py-2">
                     <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">
                       {i + 1}
                     </span>
-                    <span className="text-surface-700 text-sm font-medium">{stop.name}</span>
+                    <span className="text-surface-700 text-sm font-semibold">{stop.name}</span>
                     {stop.hint && <span className="text-surface-400 text-xs">— {stop.hint}</span>}
                   </div>
                 ))}
@@ -169,7 +186,7 @@ export default function AdminPage() {
                       value={stopName}
                       onChange={(e) => setStopName(e.target.value)}
                       placeholder="Stop name"
-                      className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
+                      className="w-full px-3 py-2 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
                     />
                   </div>
                   <div className="flex-1">
@@ -177,12 +194,12 @@ export default function AdminPage() {
                       value={stopHint}
                       onChange={(e) => setStopHint(e.target.value)}
                       placeholder="Hint (optional)"
-                      className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
+                      className="w-full px-3 py-2 rounded-button border border-cream-400 bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
                     />
                   </div>
                   <button
                     onClick={() => handleAddStop(hunt.id)}
-                    className="bg-nature-500 text-white font-semibold px-4 py-2 rounded-button text-sm hover:bg-nature-600 transition-colors"
+                    className="bg-nature-400 text-white font-bold px-4 py-2 rounded-button text-sm hover:bg-nature-500 transition-colors"
                   >
                     Add
                   </button>
@@ -196,7 +213,7 @@ export default function AdminPage() {
               ) : (
                 <button
                   onClick={() => setAddingStopTo(hunt.id)}
-                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                  className="text-primary-600 hover:text-primary-700 text-sm font-bold"
                 >
                   + Add Stop
                 </button>

@@ -8,8 +8,11 @@ export default function AppShell() {
 
   if (!hydrated) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-screen bg-cream-200">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin mx-auto" />
+          <p className="mt-4 font-display text-primary-500 text-lg">Loading...</p>
+        </div>
       </div>
     );
   }

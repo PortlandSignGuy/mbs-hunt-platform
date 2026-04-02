@@ -1,99 +1,102 @@
 @import "tailwindcss";
 
-/* ── MBS Hunt Platform — Bright, joyful, public art theme ── */
+/* ── MBS Hunt Platform — Mike Bennett Studios Brand Theme ── */
+/* Brand: "Public Joy Creator" — whimsical, character-driven, cartoon-forward */
+/* Colors sourced from mikebennettstudios.com */
+
 @theme {
-  /* Primary — vibrant teal-cyan */
-  --color-primary-50: #ecfeff;
-  --color-primary-100: #cffafe;
-  --color-primary-200: #a5f3fc;
-  --color-primary-300: #67e8f9;
-  --color-primary-400: #22d3ee;
-  --color-primary-500: #06b6d4;
-  --color-primary-600: #0891b2;
-  --color-primary-700: #0e7490;
-  --color-primary-800: #155e75;
-  --color-primary-900: #164e63;
+  /* Primary — Mike Bennett Purple */
+  --color-primary-50: #f0edfa;
+  --color-primary-100: #ddd7f3;
+  --color-primary-200: #bfb5e8;
+  --color-primary-300: #9e8fdb;
+  --color-primary-400: #8272d0;
+  --color-primary-500: #6454cb;
+  --color-primary-600: #5545b3;
+  --color-primary-700: #46389a;
+  --color-primary-800: #382d7d;
+  --color-primary-900: #2a2160;
 
-  /* Secondary — warm coral-pink */
-  --color-secondary-50: #fff1f2;
-  --color-secondary-100: #ffe4e6;
-  --color-secondary-200: #fecdd3;
-  --color-secondary-300: #fda4af;
-  --color-secondary-400: #fb7185;
-  --color-secondary-500: #f43f5e;
-  --color-secondary-600: #e11d48;
-  --color-secondary-700: #be123c;
-  --color-secondary-800: #9f1239;
-  --color-secondary-900: #881337;
+  /* Secondary — Mike Bennett Gold */
+  --color-secondary-50: #fff8eb;
+  --color-secondary-100: #feefc5;
+  --color-secondary-200: #fde29a;
+  --color-secondary-300: #fcd26e;
+  --color-secondary-400: #fabc70;
+  --color-secondary-500: #f5a623;
+  --color-secondary-600: #db8c0e;
+  --color-secondary-700: #b6710a;
+  --color-secondary-800: #935a0d;
+  --color-secondary-900: #7a4a0e;
 
-  /* Accent — sunny gold */
-  --color-accent-50: #fffbeb;
-  --color-accent-100: #fef3c7;
-  --color-accent-200: #fde68a;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
-  --color-accent-700: #b45309;
-  --color-accent-800: #92400e;
-  --color-accent-900: #78350f;
+  /* Nature — Mike Bennett Green */
+  --color-nature-50: #eefbf2;
+  --color-nature-100: #d4f5de;
+  --color-nature-200: #abebbd;
+  --color-nature-300: #74db94;
+  --color-nature-400: #4EB25C;
+  --color-nature-500: #3d9c4c;
+  --color-nature-600: #2e7d3b;
+  --color-nature-700: #266432;
+  --color-nature-800: #214f2b;
+  --color-nature-900: #1d4226;
 
-  /* Joy — playful purple */
-  --color-joy-50: #faf5ff;
-  --color-joy-100: #f3e8ff;
-  --color-joy-200: #e9d5ff;
-  --color-joy-300: #d8b4fe;
-  --color-joy-400: #c084fc;
-  --color-joy-500: #a855f7;
-  --color-joy-600: #9333ea;
-  --color-joy-700: #7e22ce;
-  --color-joy-800: #6b21a8;
-  --color-joy-900: #581c87;
+  /* Joy — playful pink-coral for accents */
+  --color-joy-50: #fff1f3;
+  --color-joy-100: #ffe0e5;
+  --color-joy-200: #ffc7d1;
+  --color-joy-300: #ffa0b1;
+  --color-joy-400: #ff6b87;
+  --color-joy-500: #f93d63;
+  --color-joy-600: #e71d4e;
+  --color-joy-700: #c31240;
+  --color-joy-800: #a3133b;
+  --color-joy-900: #8b1439;
 
-  /* Nature — fresh green */
-  --color-nature-50: #f0fdf4;
-  --color-nature-100: #dcfce7;
-  --color-nature-200: #bbf7d0;
-  --color-nature-300: #86efac;
-  --color-nature-400: #4ade80;
-  --color-nature-500: #22c55e;
-  --color-nature-600: #16a34a;
-  --color-nature-700: #15803d;
-  --color-nature-800: #166534;
-  --color-nature-900: #14532d;
+  /* Cream — Mike Bennett warm background tones */
+  --color-cream-50: #fefdfb;
+  --color-cream-100: #fdfbf5;
+  --color-cream-200: #faf8eb;
+  --color-cream-300: #f5f0dc;
+  --color-cream-400: #ede5c7;
+  --color-cream-500: #dfd3a8;
+  --color-cream-600: #c9b87e;
+  --color-cream-700: #b09c5c;
+  --color-cream-800: #917f46;
+  --color-cream-900: #78693b;
 
-  /* Neutrals — warm gray */
-  --color-surface-50: #fafaf9;
-  --color-surface-100: #f5f5f4;
-  --color-surface-200: #e7e5e4;
-  --color-surface-300: #d6d3d1;
-  --color-surface-400: #a8a29e;
-  --color-surface-500: #78716c;
-  --color-surface-600: #57534e;
-  --color-surface-700: #44403c;
-  --color-surface-800: #292524;
-  --color-surface-900: #1c1917;
+  /* Surface — warm neutrals tinted with cream */
+  --color-surface-50: #fdfcfa;
+  --color-surface-100: #faf8f4;
+  --color-surface-200: #f0ede6;
+  --color-surface-300: #e0dbd0;
+  --color-surface-400: #b5ae9f;
+  --color-surface-500: #8a8272;
+  --color-surface-600: #6b6355;
+  --color-surface-700: #514a3f;
+  --color-surface-800: #3a352d;
+  --color-surface-900: #252118;
 
   /* Semantic */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #06b6d4;
+  --color-success: #4EB25C;
+  --color-warning: #fabc70;
+  --color-danger: #e71d4e;
+  --color-info: #6454cb;
 
-  /* Typography */
-  --font-display: 'Fredoka', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* Typography — Lilita One stands in for Bugbear (swap when Mike provides woff2) */
+  --font-display: 'Lilita One', 'Bugbear', cursive, sans-serif;
+  --font-body: 'Nunito', sans-serif;
 
-  /* Radius */
-  --radius-card: 1rem;
-  --radius-button: 0.75rem;
+  /* Radius — rounded and friendly */
+  --radius-card: 1.25rem;
+  --radius-button: 0.875rem;
   --radius-badge: 9999px;
 }
 
 /* ── Base styles ── */
 body {
   font-family: var(--font-body);
-  background: linear-gradient(135deg, #ecfeff 0%, #fff1f2 50%, #fffbeb 100%);
+  background: var(--color-cream-200);
   color: var(--color-surface-800);
   min-height: 100vh;
 }
@@ -102,8 +105,30 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
 }
 
-/* ── Scrollbar (keeps it cheerful) ── */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--color-surface-100); }
+::-webkit-scrollbar-track { background: var(--color-cream-300); border-radius: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--color-primary-300); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-primary-400); }
+
+/* ── Fun extras ── */
+::selection {
+  background: var(--color-secondary-300);
+  color: var(--color-surface-900);
+}
+
+/* Slide-in animation for toasts */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Gentle float for reward celebrations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
