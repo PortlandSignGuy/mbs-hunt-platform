@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { usePlayerStore } from '../../stores/playerStore.js';
 
 const NAV_LINKS = [
-  { to: '/home', label: 'Home' },
+  { to: '/', label: 'Home' },
   { to: '/admin', label: 'Admin' },
 ];
 
@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <header className="bg-cream-100/90 backdrop-blur-sm border-b border-cream-400 sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/home" className="flex items-center gap-2.5 no-underline">
+        <Link to="/" className="flex items-center gap-2.5 no-underline">
           <span className="text-3xl">🎨</span>
           <span className="font-display font-bold text-2xl text-primary-600 tracking-wide">
             MBS Hunts
@@ -42,7 +42,7 @@ export default function Header() {
             </span>
           ) : (
             <Link
-              to="/register"
+              to="/join"
               className="bg-primary-500 text-white font-bold text-sm px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 hover:shadow-md transition-all no-underline"
             >
               Join a Hunt!

@@ -1,15 +1,14 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorBoundary from './components/shared/ErrorBoundary.jsx';
 import AppShell from './components/layout/AppShell.jsx';
 
 /* Lazy-loaded pages */
-const HomePage = lazy(() => import('./pages/HomePage.jsx'));
-const RegisterPage = lazy(() => import('./pages/RegisterPage.jsx'));
+const WelcomePage = lazy(() => import('./pages/WelcomePage.jsx'));
+const JoinPage = lazy(() => import('./pages/JoinPage.jsx'));
 const HuntPage = lazy(() => import('./pages/HuntPage.jsx'));
-const CollectionPage = lazy(() => import('./pages/CollectionPage.jsx'));
-const RewardPage = lazy(() => import('./pages/RewardPage.jsx'));
 const ScanPage = lazy(() => import('./pages/ScanPage.jsx'));
+const CompletePage = lazy(() => import('./pages/CompletePage.jsx'));
 const AdminPage = lazy(() => import('./pages/AdminPage.jsx'));
 
 function PageLoader() {
@@ -37,13 +36,11 @@ const router = createBrowserRouter([
     element: <AppShell />,
     errorElement: <ErrorBoundary />,
     children: [
-      { index: true, element: <Navigate to="/home" replace /> },
-      { path: 'home', element: lazyPage(HomePage) },
-      { path: 'register', element: lazyPage(RegisterPage) },
-      { path: 'hunt/:huntSlug', element: lazyPage(HuntPage) },
-      { path: 'hunt/:huntSlug/collection', element: lazyPage(CollectionPage) },
-      { path: 'hunt/:huntSlug/reward', element: lazyPage(RewardPage) },
-      { path: 'scan/:huntSlug/:stopId', element: lazyPage(ScanPage) },
+      { index: true, element: lazyPage(WelcomePage) },
+      { path: 'join', element: lazyPage(JoinPage) },
+      { path: 'hunt', element: lazyPage(HuntPage) },
+      { path: 'scan/:slug', element: lazyPage(ScanPage) },
+      { path: 'complete', element: lazyPage(CompletePage) },
       { path: 'admin', element: lazyPage(AdminPage) },
     ],
   },
