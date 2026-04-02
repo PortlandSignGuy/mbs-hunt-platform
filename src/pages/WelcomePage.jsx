@@ -1,27 +1,37 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
 import { usePlayerStore } from '../stores/playerStore.js';
 
 export default function WelcomePage() {
+  const navigate = useNavigate();
   const hunts = useHuntStore((s) => s.hunts);
   const player = usePlayerStore((s) => s.player);
+  const setActiveHunt = usePlayerStore((s) => s.setActiveHunt);
+  const getCollected = usePlayerStore((s) => s.getCollected);
+
+  function handlePickHunt(hunt) {
+    setActiveHunt(hunt.id);
+    navigate('/hunt');
+  }
+
+  const published = hunts.filter((h) => h.status === 'published');
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Hero */}
-      <section className="text-center py-14">
+      <section className="text-center py-10">
         <div className="text-6xl mb-4 animate-float">🎨</div>
-        <h1 className="font-display text-5xl text-primary-600 mb-4">
-          Mike Bennett Scavenger Hunts
+        <h1 className="font-display text-4xl sm:text-5xl text-primary-600 mb-3">
+          Mike Bennett<br />Scavenger Hunts
         </h1>
-        <p className="text-xl text-surface-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg text-surface-600 max-w-md mx-auto leading-relaxed">
           Discover public art in your city! Scan QR codes, collect all 15 photos,
-          and unlock an exclusive coloring page reward.
+          and unlock an exclusive coloring page.
         </p>
         {!player && (
           <Link
             to="/join"
-            className="inline-block mt-8 bg-primary-500 text-white font-display text-xl px-10 py-4 rounded-button shadow-lg hover:bg-primary-600 hover:shadow-xl hover:scale-105 transition-all no-underline"
+            className="inline-block mt-6 bg-primary-500 text-white font-display text-lg px-8 py-3.5 rounded-button shadow-lg hover:bg-primary-600 hover:shadow-xl active:scale-[0.98] transition-all no-underline"
           >
             Start Your Adventure!
           </Link>
@@ -30,41 +40,61 @@ export default function WelcomePage() {
 
       {/* Available hunts */}
       <section>
-        <h2 className="font-display text-2xl text-surface-800 mb-6">
-          Available Hunts
+        <h2 className="font-display text-xl text-surface-800 mb-4">
+          {published.length > 0 ? 'Pick a Hunt' : 'Available Hunts'}
         </h2>
-        {hunts.filter((h) => h.status === 'published').length === 0 ? (
-          <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-12 text-center">
-            <div className="text-5xl mb-4">🗺️</div>
-            <p className="text-surface-500 text-lg font-semibold">No hunts available yet.</p>
+        {published.length === 0 ? (
+          <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-10 text-center">
+            <div className="text-5xl mb-3">🗺️</div>
+            <p className="text-surface-500 font-semibold">No hunts available yet.</p>
             <p className="text-surface-400 text-sm mt-1">Check back soon for new adventures!</p>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {hunts.filter((h) => h.status === 'published').map((hunt) => (
-              <Link
-                key={hunt.id}
-                to="/hunt"
-                className="group bg-cream-50 rounded-card shadow-sm border border-cream-400 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all no-underline"
-              >
-                <div className="h-40 bg-gradient-to-br from-primary-200 via-secondary-200 to-nature-200 flex items-center justify-center">
-                  <span className="text-6xl group-hover:scale-110 transition-transform">
-                    {hunt.emoji || '🎨'}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display text-lg text-surface-800 mb-1">
-                    {hunt.name}
-                  </h3>
-                  <p className="text-surface-500 text-sm mb-3">{hunt.city}</p>
-                  <div className="flex items-center gap-2 text-sm text-primary-600 font-bold">
-                    <span>{hunt.stops?.length || 0} stops</span>
-                    <span className="text-surface-300">|</span>
-                    <span>Coloring page reward</span>
+          <div className="space-y-4">
+            {published.map((hunt) => {
+              const collected = getCollected(hunt.id);
+              const totalStops = hunt.stops?.length || 0;
+              const pct = totalStops > 0 ? (collected.length / totalStops) * 100 : 0;
+              const complete = totalStops > 0 && collected.length >= totalStops;
+
+              return (
+                <button
+                  key={hunt.id}
+                  onClick={() => handlePickHunt(hunt)}
+                  className="w-full text-left bg-cream-50 rounded-card shadow-sm border border-cream-400 overflow-hidden hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.99] transition-all"
+                >
+                  <div className="flex items-center gap-4 p-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-200 via-secondary-200 to-nature-200 flex items-center justify-center shrink-0">
+                      <span className="text-3xl">{hunt.emoji || '🎨'}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-display text-lg text-surface-800">{hunt.name}</h3>
+                      <p className="text-surface-500 text-sm">{hunt.city}</p>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <div className="flex-1 h-2 bg-cream-300 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              complete
+                                ? 'bg-nature-400'
+                                : 'bg-gradient-to-r from-primary-400 to-secondary-400'
+                            }`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-bold text-surface-500 shrink-0">
+                          {collected.length}/{totalStops}
+                        </span>
+                      </div>
+                    </div>
+                    {complete && (
+                      <span className="bg-nature-100 text-nature-700 text-xs font-bold px-2 py-1 rounded-badge shrink-0">
+                        Done!
+                      </span>
+                    )}
                   </div>
-                </div>
-              </Link>
-            ))}
+                </button>
+              );
+            })}
           </div>
         )}
       </section>

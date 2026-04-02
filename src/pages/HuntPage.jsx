@@ -1,24 +1,15 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
 import { usePlayerStore } from '../stores/playerStore.js';
 
 export default function HuntPage() {
-  const { huntSlug } = useParams();
-  const hunt = useHuntStore((s) => s.hunts.find((h) => h.slug === huntSlug));
   const player = usePlayerStore((s) => s.player);
-  const collected = usePlayerStore((s) => s.getCollected(huntSlug));
+  const activeHuntId = usePlayerStore((s) => s.activeHuntId);
+  const hunt = useHuntStore((s) => s.hunts.find((h) => h.id === activeHuntId));
+  const collected = usePlayerStore((s) => s.getCollected(activeHuntId));
 
-  if (!hunt) {
-    return (
-      <div className="text-center py-20">
-        <div className="text-5xl mb-4">🔍</div>
-        <h1 className="font-display text-2xl text-surface-800 mb-2">Hunt not found</h1>
-        <Link to="/home" className="text-primary-600 hover:underline font-bold">Back to Home</Link>
-      </div>
-    );
-  }
-
-  if (!player) return <Navigate to="/register" replace />;
+  if (!player) return <Navigate to="/join" replace />;
+  if (!hunt) return <Navigate to="/" replace />;
 
   const stops = hunt.stops || [];
   const collectedIds = new Set(collected.map((c) => c.stopId));
@@ -28,27 +19,28 @@ export default function HuntPage() {
   const progressPct = totalStops > 0 ? (collectedCount / totalStops) * 100 : 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Hunt header */}
-      <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-6">
-        <div className="flex items-start gap-4">
-          <span className="text-5xl">{hunt.emoji || '🎨'}</span>
-          <div className="flex-1">
-            <h1 className="font-display text-3xl text-primary-600">{hunt.name}</h1>
-            <p className="text-surface-500 mt-1 font-semibold">{hunt.city}</p>
-            {hunt.description && (
-              <p className="text-surface-600 mt-3">{hunt.description}</p>
-            )}
+      <div className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-5">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-4xl">{hunt.emoji || '🎨'}</span>
+          <div className="flex-1 min-w-0">
+            <h1 className="font-display text-2xl text-primary-600 leading-tight">{hunt.name}</h1>
+            <p className="text-surface-500 text-sm font-semibold">{hunt.city}</p>
           </div>
         </div>
 
+        {hunt.description && (
+          <p className="text-surface-600 text-sm mb-4">{hunt.description}</p>
+        )}
+
         {/* Progress bar */}
-        <div className="mt-6">
-          <div className="flex justify-between text-sm font-bold mb-2">
+        <div>
+          <div className="flex justify-between text-sm font-bold mb-1.5">
             <span className="text-surface-600">{collectedCount} of {totalStops} collected</span>
             <span className="text-primary-600">{Math.round(progressPct)}%</span>
           </div>
-          <div className="h-4 bg-cream-300 rounded-full overflow-hidden">
+          <div className="h-3.5 bg-cream-300 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-primary-400 via-secondary-400 to-nature-400 rounded-full transition-all duration-700"
               style={{ width: `${progressPct}%` }}
@@ -58,44 +50,42 @@ export default function HuntPage() {
 
         {allCollected && (
           <Link
-            to={`/hunt/${huntSlug}/reward`}
-            className="inline-block mt-4 bg-secondary-400 text-surface-900 font-display text-lg px-6 py-2.5 rounded-button shadow-md hover:bg-secondary-500 hover:shadow-lg transition-all no-underline animate-bounce"
+            to="/complete"
+            className="inline-block mt-4 w-full text-center bg-secondary-400 text-surface-900 font-display text-lg py-3 rounded-button shadow-md hover:bg-secondary-500 hover:shadow-lg transition-all no-underline animate-bounce"
           >
             Claim Your Reward!
           </Link>
         )}
       </div>
 
-      {/* Stops grid */}
+      {/* Stops list */}
       <section>
-        <h2 className="font-display text-xl text-surface-800 mb-4">Stops</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 className="font-display text-lg text-surface-800 mb-3">Stops</h2>
+        <div className="space-y-3">
           {stops.map((stop, i) => {
             const found = collectedIds.has(stop.id);
             return (
               <div
                 key={stop.id}
-                className={`relative rounded-card border-2 p-5 transition-all ${
+                className={`flex items-center gap-3 rounded-card border-2 p-4 transition-all ${
                   found
-                    ? 'bg-nature-50 border-nature-400 shadow-sm'
-                    : 'bg-cream-50 border-cream-400 opacity-75'
+                    ? 'bg-nature-50 border-nature-400'
+                    : 'bg-cream-50 border-cream-400 opacity-70'
                 }`}
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                    found ? 'bg-nature-400 text-white' : 'bg-cream-300 text-surface-500'
-                  }`}>
-                    {found ? '✓' : i + 1}
-                  </span>
-                  <h3 className="font-display text-surface-800">{stop.name}</h3>
+                <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+                  found ? 'bg-nature-400 text-white' : 'bg-cream-300 text-surface-500'
+                }`}>
+                  {found ? '✓' : i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-display text-surface-800 text-sm">{stop.name}</h3>
+                  {stop.hint && !found && (
+                    <p className="text-surface-400 text-xs mt-0.5 truncate">{stop.hint}</p>
+                  )}
                 </div>
-                {stop.hint && (
-                  <p className="text-surface-500 text-sm">{stop.hint}</p>
-                )}
-                {found && stop.photoUrl && (
-                  <div className="mt-3 rounded-lg overflow-hidden">
-                    <img src={stop.photoUrl} alt={stop.name} className="w-full h-32 object-cover" />
-                  </div>
+                {found && (
+                  <span className="text-nature-600 text-xs font-bold shrink-0">Found!</span>
                 )}
               </div>
             );
@@ -103,17 +93,12 @@ export default function HuntPage() {
         </div>
       </section>
 
-      {/* View collection link */}
-      {collectedCount > 0 && (
-        <div className="text-center">
-          <Link
-            to={`/hunt/${huntSlug}/collection`}
-            className="text-primary-600 hover:text-primary-700 font-bold hover:underline"
-          >
-            View your full collection →
-          </Link>
-        </div>
-      )}
+      {/* Back to hunts */}
+      <div className="text-center pb-4">
+        <Link to="/" className="text-primary-600 hover:underline text-sm font-bold no-underline">
+          ← Back to Hunts
+        </Link>
+      </div>
     </div>
   );
 }

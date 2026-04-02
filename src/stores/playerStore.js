@@ -4,33 +4,45 @@ import { persist } from 'zustand/middleware';
 export const usePlayerStore = create(
   persist(
     (set, get) => ({
-      /** { name, email } or null if not registered */
+      /** { name, email, marketingOptIn, registeredAt } or null */
       player: null,
 
+      /** Currently active hunt ID (set when player picks a hunt) */
+      activeHuntId: null,
+
       /**
-       * Collections keyed by hunt slug:
-       * { [huntSlug]: [{ stopId, stopName, photoUrl, collectedAt }] }
+       * Collections keyed by hunt ID:
+       * { [huntId]: [{ stopId, stopName, photoUrl, collectedAt }] }
        */
       collections: {},
 
-      register: ({ name, email }) =>
-        set({ player: { name, email, registeredAt: new Date().toISOString() } }),
+      register: ({ name, email, marketingOptIn }) =>
+        set({
+          player: {
+            name,
+            email,
+            marketingOptIn: marketingOptIn || false,
+            registeredAt: new Date().toISOString(),
+          },
+        }),
 
-      logout: () => set({ player: null }),
+      logout: () => set({ player: null, activeHuntId: null }),
 
-      collectStop: (huntSlug, stopData) =>
+      setActiveHunt: (huntId) => set({ activeHuntId: huntId }),
+
+      collectStop: (huntId, stopData) =>
         set((s) => {
-          const existing = s.collections[huntSlug] || [];
+          const existing = s.collections[huntId] || [];
           if (existing.some((c) => c.stopId === stopData.stopId)) return s;
           return {
             collections: {
               ...s.collections,
-              [huntSlug]: [...existing, stopData],
+              [huntId]: [...existing, stopData],
             },
           };
         }),
 
-      getCollected: (huntSlug) => get().collections[huntSlug] || [],
+      getCollected: (huntId) => get().collections[huntId] || [],
     }),
     { name: 'mbs-player' },
   ),

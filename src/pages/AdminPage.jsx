@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useHuntStore } from '../stores/huntStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 import { genId } from '../lib/ids.js';
+import { loadSeedData, clearSeedData } from '../lib/seed.js';
 
 export default function AdminPage() {
   const hunts = useHuntStore((s) => s.hunts);
@@ -66,14 +67,28 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <h1 className="font-display text-3xl text-primary-600">Admin</h1>
-        <button
-          onClick={() => setShowNewHunt(true)}
-          className="bg-primary-500 text-white font-bold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors"
-        >
-          + New Hunt
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              if (loadSeedData()) {
+                addToast({ type: 'success', message: 'Demo hunt loaded!' });
+              } else {
+                addToast({ type: 'info', message: 'Demo data already loaded.' });
+              }
+            }}
+            className="bg-secondary-400 text-surface-900 font-bold px-4 py-2 rounded-button shadow-sm hover:bg-secondary-500 transition-colors text-sm"
+          >
+            Load Demo
+          </button>
+          <button
+            onClick={() => setShowNewHunt(true)}
+            className="bg-primary-500 text-white font-bold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors text-sm"
+          >
+            + New Hunt
+          </button>
+        </div>
       </div>
 
       {/* New hunt form */}
