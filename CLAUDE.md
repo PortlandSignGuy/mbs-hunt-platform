@@ -54,11 +54,21 @@ src/
 
 ## Business Rules
 - 15 stops per hunt (configurable via `STOPS_PER_HUNT` constant)
-- Player must collect ALL stops to unlock coloring page reward
+- Optional 16th bonus stop (pop-up merch shop) — unlocks bonus reward, not required for base completion
+- Player must collect ALL 15 base stops to unlock coloring page reward
 - Each stop collected only once per player
 - QR codes at physical locations link to `/scan/:huntSlug/:stopId`
 - Hunt statuses: draft → published → archived
 - No payments, no booking, no scheduling
+
+## Planned Features (see ROADMAP.md)
+1. **Digital Passport** — illustrated map per hunt, stamps on collection, shareable image
+2. **Photo Moments** — player uploads photo at each scan responding to a fun prompt, stored in Supabase
+3. **Group Hunt Mode** — 4-digit join code, shared collection, group progress
+4. **Artist Audio Story** — MP3 per stop, plays on scan confirmation
+5. **Social Follow Hint** — honor-system Instagram follow unlocks a location hint
+6. **Bonus 16th Stop** — pop-up merch shop, bonus reward on scan
+7. **Explorer Achievement** — complete 4 hunts in a region → physical sticker redemption code
 
 ## Team
 - **Pat McNamara** — Developer
