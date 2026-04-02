@@ -1,0 +1,210 @@
+import { useState } from 'react';
+import { useHuntStore } from '../stores/huntStore.js';
+import { useUiStore } from '../stores/uiStore.js';
+import { genId } from '../lib/ids.js';
+
+export default function AdminPage() {
+  const hunts = useHuntStore((s) => s.hunts);
+  const addHunt = useHuntStore((s) => s.addHunt);
+  const removeHunt = useHuntStore((s) => s.removeHunt);
+  const addStop = useHuntStore((s) => s.addStop);
+  const addToast = useUiStore((s) => s.addToast);
+
+  const [showNewHunt, setShowNewHunt] = useState(false);
+  const [huntName, setHuntName] = useState('');
+  const [huntCity, setHuntCity] = useState('');
+  const [huntEmoji, setHuntEmoji] = useState('🎨');
+
+  const [addingStopTo, setAddingStopTo] = useState(null);
+  const [stopName, setStopName] = useState('');
+  const [stopHint, setStopHint] = useState('');
+
+  function handleCreateHunt(e) {
+    e.preventDefault();
+    if (!huntName.trim() || !huntCity.trim()) return;
+    const slug = huntName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    addHunt({
+      id: genId('HNT'),
+      name: huntName.trim(),
+      city: huntCity.trim(),
+      slug,
+      emoji: huntEmoji || '🎨',
+      description: '',
+      status: 'draft',
+      rewardUrl: null,
+      stops: [],
+      createdAt: new Date().toISOString(),
+    });
+    addToast({ type: 'success', message: `Hunt "${huntName.trim()}" created!` });
+    setHuntName('');
+    setHuntCity('');
+    setHuntEmoji('🎨');
+    setShowNewHunt(false);
+  }
+
+  function handleAddStop(huntId) {
+    if (!stopName.trim()) return;
+    addStop(huntId, {
+      id: genId('STP'),
+      name: stopName.trim(),
+      hint: stopHint.trim(),
+      photoUrl: null,
+      artist: '',
+      description: '',
+    });
+    addToast({ type: 'success', message: `Stop "${stopName.trim()}" added!` });
+    setStopName('');
+    setStopHint('');
+    setAddingStopTo(null);
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-3xl font-bold text-surface-800">Admin</h1>
+        <button
+          onClick={() => setShowNewHunt(true)}
+          className="bg-primary-500 text-white font-semibold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors"
+        >
+          + New Hunt
+        </button>
+      </div>
+
+      {/* New hunt form */}
+      {showNewHunt && (
+        <form onSubmit={handleCreateHunt} className="bg-white rounded-card shadow-sm border border-surface-200 p-6 space-y-4">
+          <h2 className="font-display text-xl font-bold text-surface-800">Create Hunt</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-1">Hunt Name</label>
+              <input
+                value={huntName}
+                onChange={(e) => setHuntName(e.target.value)}
+                placeholder="Portland Art Walk"
+                required
+                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-1">City</label>
+              <input
+                value={huntCity}
+                onChange={(e) => setHuntCity(e.target.value)}
+                placeholder="Portland, OR"
+                required
+                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-surface-700 mb-1">Emoji</label>
+              <input
+                value={huntEmoji}
+                onChange={(e) => setHuntEmoji(e.target.value)}
+                className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none"
+              />
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button type="submit" className="bg-primary-500 text-white font-semibold px-5 py-2 rounded-button hover:bg-primary-600 transition-colors">
+              Create
+            </button>
+            <button type="button" onClick={() => setShowNewHunt(false)} className="text-surface-500 hover:text-surface-700 font-medium px-4 py-2">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Hunt list */}
+      {hunts.length === 0 ? (
+        <div className="bg-white rounded-card shadow-sm border border-surface-200 p-12 text-center">
+          <div className="text-5xl mb-4">📋</div>
+          <p className="text-surface-500 text-lg">No hunts created yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {hunts.map((hunt) => (
+            <div key={hunt.id} className="bg-white rounded-card shadow-sm border border-surface-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{hunt.emoji}</span>
+                  <div>
+                    <h3 className="font-display font-bold text-lg text-surface-800">{hunt.name}</h3>
+                    <p className="text-surface-500 text-sm">{hunt.city} — {hunt.stops?.length || 0} stops</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-badge ${
+                    hunt.status === 'published' ? 'bg-nature-100 text-nature-700' : 'bg-surface-100 text-surface-600'
+                  }`}>
+                    {hunt.status}
+                  </span>
+                  <button
+                    onClick={() => removeHunt(hunt.id)}
+                    className="text-surface-400 hover:text-danger text-sm px-2 py-1 transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+
+              {/* Stops */}
+              <div className="space-y-2 mb-4">
+                {hunt.stops?.map((stop, i) => (
+                  <div key={stop.id} className="flex items-center gap-3 bg-surface-50 rounded-lg px-4 py-2">
+                    <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">
+                      {i + 1}
+                    </span>
+                    <span className="text-surface-700 text-sm font-medium">{stop.name}</span>
+                    {stop.hint && <span className="text-surface-400 text-xs">— {stop.hint}</span>}
+                  </div>
+                ))}
+              </div>
+
+              {/* Add stop */}
+              {addingStopTo === hunt.id ? (
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1">
+                    <input
+                      value={stopName}
+                      onChange={(e) => setStopName(e.target.value)}
+                      placeholder="Stop name"
+                      className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <input
+                      value={stopHint}
+                      onChange={(e) => setStopHint(e.target.value)}
+                      placeholder="Hint (optional)"
+                      className="w-full px-3 py-2 rounded-button border border-surface-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-200 outline-none text-sm"
+                    />
+                  </div>
+                  <button
+                    onClick={() => handleAddStop(hunt.id)}
+                    className="bg-nature-500 text-white font-semibold px-4 py-2 rounded-button text-sm hover:bg-nature-600 transition-colors"
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={() => setAddingStopTo(null)}
+                    className="text-surface-400 hover:text-surface-600 text-sm px-2 py-2"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setAddingStopTo(hunt.id)}
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  + Add Stop
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
