@@ -20,13 +20,26 @@ export default function WelcomePage() {
     <div className="space-y-8">
       {/* Hero */}
       <section className="text-center py-10">
-        <div className="text-6xl mb-4 animate-float">🎨</div>
-        <h1 className="font-display text-4xl sm:text-5xl text-primary-600 mb-3">
-          Mike Bennett<br />Scavenger Hunts
+        {/* Partner logos */}
+        <div className="flex items-center justify-center gap-6 mb-6">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0718/2313/0914/files/MBS_STACKED-COLOR-LOGO_WHITE-OUTLINE.png?v=1759188855"
+            alt="Mike Bennett Studios"
+            className="h-20 sm:h-24"
+          />
+          <span className="text-surface-300 text-2xl font-bold">×</span>
+          <div className="bg-white rounded-2xl p-2 shadow-sm border border-cream-300">
+            <span className="font-display text-lg text-primary-600">The Zoo Quarium</span>
+          </div>
+        </div>
+
+        <h1 className="font-display text-3xl sm:text-4xl text-primary-600 mb-3">
+          PNW Animal<br />Scavenger Hunt
         </h1>
         <p className="text-lg text-surface-600 max-w-md mx-auto leading-relaxed">
-          Discover hidden PNW animal characters! Scan QR codes, collect
-          every character card, and unlock an exclusive coloring page reward.
+          Discover hidden PNW animal characters at the Old Mill District!
+          Scan QR codes, collect every character card, and unlock an
+          exclusive coloring page reward.
         </p>
         {!player && (
           <Link

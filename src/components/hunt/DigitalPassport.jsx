@@ -78,7 +78,12 @@ export default function DigitalPassport({
       {/* Passport card */}
       <div ref={passportRef} className="bg-cream-50 rounded-card border-2 border-primary-300 shadow-lg overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 px-5 py-4 text-center">
+        <div className="bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 px-5 py-5 text-center">
+          <img
+            src="https://cdn.shopify.com/s/files/1/0718/2313/0914/files/MBS_STACKED-COLOR-LOGO_WHITE-OUTLINE.png?v=1759188855"
+            alt="Mike Bennett Studios"
+            className="h-14 mx-auto mb-3"
+          />
           <p className="text-primary-200 text-xs font-bold uppercase tracking-widest mb-1">
             Digital Passport
           </p>

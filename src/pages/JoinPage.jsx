@@ -81,12 +81,16 @@ export default function JoinPage() {
         <div className="bg-white rounded-b-card shadow-xl border border-cream-300 p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="text-6xl mb-4 animate-float">🎉</div>
+            <img
+              src="https://cdn.shopify.com/s/files/1/0718/2313/0914/files/MBS_STACKED-COLOR-LOGO_WHITE-OUTLINE.png?v=1759188855"
+              alt="Mike Bennett Studios"
+              className="h-16 mx-auto mb-4"
+            />
             <h1 className="font-display text-3xl text-primary-600 mb-2">
               Join the Hunt!
             </h1>
             <p className="text-surface-500 leading-relaxed">
-              Sign up to explore public art, collect photos, and unlock an exclusive coloring page reward!
+              Discover PNW animal characters, collect cards, and unlock an exclusive coloring page reward!
             </p>
           </div>
 

@@ -37,7 +37,12 @@ export default function CompletePage() {
       <div className="bg-cream-50 rounded-card shadow-lg border border-cream-400 overflow-hidden">
         {/* Celebration header */}
         <div className="bg-gradient-to-r from-secondary-300 via-primary-300 to-nature-300 p-8 text-center">
-          <div className="text-6xl mb-3 animate-float">🎉</div>
+          <img
+            src="https://cdn.shopify.com/s/files/1/0718/2313/0914/files/MBS_STACKED-COLOR-LOGO_WHITE-OUTLINE.png?v=1759188855"
+            alt="Mike Bennett Studios"
+            className="h-14 mx-auto mb-4"
+          />
+          <div className="text-5xl mb-3 animate-float">🎉</div>
           <h1 className="font-display text-3xl text-white drop-shadow-md">
             Congratulations, {player.name}!
           </h1>

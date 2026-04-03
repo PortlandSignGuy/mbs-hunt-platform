@@ -16,10 +16,11 @@ export default function Header() {
     <header className="bg-cream-100/90 backdrop-blur-sm border-b border-cream-400 sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 no-underline" onClick={() => setMenuOpen(false)}>
-          <span className="text-2xl">🎨</span>
-          <span className="font-display font-bold text-xl text-primary-600">
-            MBS Hunts
-          </span>
+          <img
+            src="https://cdn.shopify.com/s/files/1/0718/2313/0914/files/MBS_STACKED-COLOR-LOGO_WHITE-OUTLINE.png?v=1759188855"
+            alt="Mike Bennett Studios"
+            className="h-10"
+          />
         </Link>
 
         {/* Desktop nav */}
