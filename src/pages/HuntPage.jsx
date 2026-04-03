@@ -93,10 +93,16 @@ export default function HuntPage() {
         </div>
       </section>
 
-      {/* Back to hunts */}
-      <div className="text-center pb-4">
+      {/* Passport + back */}
+      <div className="flex items-center justify-between pb-4">
         <Link to="/" className="text-primary-600 hover:underline text-sm font-bold no-underline">
           ← Back to Hunts
+        </Link>
+        <Link
+          to="/passport"
+          className="inline-flex items-center gap-1.5 bg-primary-100 text-primary-700 font-bold text-sm px-4 py-2 rounded-button hover:bg-primary-200 transition-colors no-underline"
+        >
+          🗺️ Passport & Map
         </Link>
       </div>
     </div>

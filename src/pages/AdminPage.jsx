@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useHuntStore } from '../stores/huntStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 import { genId } from '../lib/ids.js';
-import { loadSeedData, clearSeedData } from '../lib/seed.js';
+import { loadSeedData } from '../lib/seed.js';
+import { loadBendSeedData } from '../lib/seed-bend.js';
 
 export default function AdminPage() {
   const hunts = useHuntStore((s) => s.hunts);
@@ -72,8 +73,10 @@ export default function AdminPage() {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              if (loadSeedData()) {
-                addToast({ type: 'success', message: 'Demo hunt loaded!' });
+              const p = loadSeedData();
+              const b = loadBendSeedData();
+              if (p || b) {
+                addToast({ type: 'success', message: 'Demo hunts loaded!' });
               } else {
                 addToast({ type: 'info', message: 'Demo data already loaded.' });
               }

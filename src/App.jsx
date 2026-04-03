@@ -9,6 +9,7 @@ const JoinPage = lazy(() => import('./pages/JoinPage.jsx'));
 const HuntPage = lazy(() => import('./pages/HuntPage.jsx'));
 const ScanPage = lazy(() => import('./pages/ScanPage.jsx'));
 const CompletePage = lazy(() => import('./pages/CompletePage.jsx'));
+const PassportPage = lazy(() => import('./pages/PassportPage.jsx'));
 const AdminPage = lazy(() => import('./pages/AdminPage.jsx'));
 
 function PageLoader() {
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
       { path: 'hunt', element: lazyPage(HuntPage) },
       { path: 'scan/:slug', element: lazyPage(ScanPage) },
       { path: 'complete', element: lazyPage(CompletePage) },
+      { path: 'passport', element: lazyPage(PassportPage) },
       { path: 'admin', element: lazyPage(AdminPage) },
     ],
   },
