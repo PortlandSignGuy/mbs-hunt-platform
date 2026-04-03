@@ -53,9 +53,13 @@ export default function WelcomePage() {
           <div className="space-y-4">
             {published.map((hunt) => {
               const collected = collections[hunt.id] || [];
-              const totalStops = hunt.stops?.length || 0;
-              const pct = totalStops > 0 ? (collected.length / totalStops) * 100 : 0;
-              const complete = totalStops > 0 && collected.length >= totalStops;
+              const baseStops = (hunt.stops || []).filter((s) => !s.isBonus);
+              const totalStops = baseStops.length;
+              const collectedBase = collected.filter(
+                (c) => baseStops.some((s) => s.id === c.stopId)
+              ).length;
+              const pct = totalStops > 0 ? (collectedBase / totalStops) * 100 : 0;
+              const complete = totalStops > 0 && collectedBase >= totalStops;
 
               return (
                 <button
@@ -82,7 +86,7 @@ export default function WelcomePage() {
                           />
                         </div>
                         <span className="text-xs font-bold text-surface-500 shrink-0">
-                          {collected.length}/{totalStops}
+                          {collectedBase}/{totalStops}
                         </span>
                       </div>
                     </div>
