@@ -45,6 +45,9 @@ export const usePlayerStore = create(
           };
         }),
 
+      /** Clear all collections (keeps player registration) */
+      resetProgress: () => set({ collections: {}, activeHuntId: null }),
+
       /** Attach a player photo to a collected stop */
       addPhoto: (huntId, stopId, photoDataUrl) =>
         set((s) => {

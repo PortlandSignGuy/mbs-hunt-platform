@@ -83,6 +83,15 @@ export default function AdminPage() {
             Refresh Demo
           </button>
           <button
+            onClick={() => {
+              usePlayerStore.getState().resetProgress();
+              addToast({ type: 'success', message: 'All progress reset!' });
+            }}
+            className="bg-joy-100 text-joy-700 font-bold px-4 py-2 rounded-button shadow-sm hover:bg-joy-200 transition-colors text-sm"
+          >
+            Reset Progress
+          </button>
+          <button
             onClick={() => setShowNewHunt(true)}
             className="bg-primary-500 text-white font-bold px-5 py-2 rounded-button shadow-sm hover:bg-primary-600 transition-colors text-sm"
           >
