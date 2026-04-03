@@ -25,8 +25,8 @@ export default function WelcomePage() {
           Mike Bennett<br />Scavenger Hunts
         </h1>
         <p className="text-lg text-surface-600 max-w-md mx-auto leading-relaxed">
-          Discover hidden animal characters in your city! Scan QR codes, collect
-          every character card, and unlock an exclusive coloring page.
+          Discover hidden PNW animal characters! Scan QR codes, collect
+          every character card, and unlock an exclusive coloring page reward.
         </p>
         {!player && (
           <Link

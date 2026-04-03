@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { usePlayerStore, useCollected } from '../stores/playerStore.js';
 import { useHuntStore } from '../stores/huntStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 import DigitalPassport from '../components/hunt/DigitalPassport.jsx';
+import CharacterDetailModal from '../components/hunt/CharacterDetailModal.jsx';
 
 export default function PassportPage() {
   const navigate = useNavigate();
@@ -10,16 +12,17 @@ export default function PassportPage() {
   const activeHuntId = usePlayerStore((s) => s.activeHuntId);
   const hunt = useHuntStore((s) => s.hunts.find((h) => h.id === activeHuntId));
   const collected = useCollected(activeHuntId);
-  const addToast = useUiStore((s) => s.addToast);
+  const collectedIds = new Set(collected.map((c) => c.stopId));
+  const [detailStop, setDetailStop] = useState(null);
 
   if (!hunt) return <Navigate to="/" replace />;
 
   const stops = hunt.stops || [];
 
   function handleStopTap(stop) {
-    const isFound = collected.some((c) => c.stopId === stop.id);
+    const isFound = collectedIds.has(stop.id);
     if (isFound) {
-      addToast({ type: 'info', message: `${stop.name} — already collected!` });
+      setDetailStop(stop);
     } else {
       navigate(`/scan/${stop.slug || stop.id}`);
     }
@@ -30,7 +33,7 @@ export default function PassportPage() {
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl text-primary-600">Passport</h1>
         <Link to="/hunt" className="text-primary-600 text-sm font-bold no-underline hover:underline">
-          ← Stops List
+          ← Characters
         </Link>
       </div>
 
@@ -41,6 +44,14 @@ export default function PassportPage() {
         playerName={player?.name}
         onStopTap={handleStopTap}
       />
+
+      {detailStop && (
+        <CharacterDetailModal
+          stop={detailStop}
+          isCollected={collectedIds.has(detailStop.id)}
+          onClose={() => setDetailStop(null)}
+        />
+      )}
     </div>
   );
 }

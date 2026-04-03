@@ -9,12 +9,12 @@ import { useHuntStore } from '../stores/huntStore.js';
 
 const BEND_HUNT = {
   id: 'HNT-bend-oldmill',
-  name: 'Bend Old Mill Art Walk',
+  name: 'PNW Animal Scavenger Hunt',
   city: 'Bend, OR',
   slug: 'bend-old-mill',
   emoji: '🏔️',
   description:
-    'Discover 24 hidden animal characters across the Old Mill District! Solve riddles, scan QR codes, and collect every character card. Can you find them all?',
+    'Discover hidden PNW animal characters across the Old Mill District! A collaboration between Mike Bennett Studios and The Zoo Quarium. Solve riddles, scan QR codes, and collect every character card!',
   status: 'published',
   rewardUrl: null,
   createdAt: '2026-04-01T00:00:00.000Z',

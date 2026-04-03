@@ -109,12 +109,12 @@ export default function OldMillMap({ stops, collectedIds, onStopTap }) {
         </text>
 
         {/* ── Stop markers ── */}
-        {stops.map((stop, i) => {
+        {stops.filter((s) => s.is_active !== false && s.mapX > 0).map((stop, i) => {
           const cx = (stop.mapX / 100) * 500;
           const cy = (stop.mapY / 100) * 400;
           const isCollected = collected.has(stop.id);
           const isBonus = stop.isBonus;
-          const num = i + 1;
+          const num = stop.sortOrder || (i + 1);
 
           return (
             <g
@@ -124,7 +124,7 @@ export default function OldMillMap({ stops, collectedIds, onStopTap }) {
               className="cursor-pointer"
               role="button"
               tabIndex={0}
-              aria-label={`${stop.name}${isCollected ? ' — collected' : ' — not yet found'}`}
+              aria-label={`${isCollected ? stop.character_name || stop.name : stop.character_species || 'Mystery'}${isCollected ? ' — collected' : ' — not yet found'}`}
             >
               {/* Glow ring for collected */}
               {isCollected && (
@@ -133,27 +133,30 @@ export default function OldMillMap({ stops, collectedIds, onStopTap }) {
                 </circle>
               )}
 
-              {/* Pin circle */}
+              {/* Pin — collected shows colored, uncollected shows faint dot */}
               <circle
                 cx={cx}
                 cy={cy}
-                r="12"
+                r={isCollected ? 12 : 5}
                 fill={isCollected ? (isBonus ? '#fbbf24' : '#4EB25C') : '#d6d3d1'}
-                stroke={isCollected ? (isBonus ? '#d97706' : '#15803d') : '#a8a29e'}
-                strokeWidth="2"
+                stroke={isCollected ? (isBonus ? '#d97706' : '#15803d') : 'transparent'}
+                strokeWidth={isCollected ? 2 : 0}
+                opacity={isCollected ? 1 : 0.4}
               />
 
-              {/* Number or checkmark */}
-              <text
-                x={cx}
-                y={cy + 4}
-                fontSize="10"
-                fontWeight="700"
-                fill={isCollected ? '#fff' : '#78716c'}
-                textAnchor="middle"
-              >
-                {isCollected ? '✓' : isBonus ? '★' : num}
-              </text>
+              {/* Label — only for collected */}
+              {isCollected && (
+                <text
+                  x={cx}
+                  y={cy + 4}
+                  fontSize="10"
+                  fontWeight="700"
+                  fill="#fff"
+                  textAnchor="middle"
+                >
+                  {isBonus ? '★' : '✓'}
+                </text>
+              )}
             </g>
           );
         })}

@@ -1,10 +1,11 @@
 import { useRef, useCallback } from 'react';
+import CharacterCard from './CharacterCard.jsx';
 import OldMillMap from './OldMillMap.jsx';
 
 /**
- * DigitalPassport — The full passport view with illustrated map + stamp grid.
- * Shows a map with collected/uncollected pins, a stamp collection grid below,
- * and a share button when complete.
+ * DigitalPassport — Card collection view with illustrated map.
+ * Shows collected characters as revealed cards, uncollected as mystery silhouettes.
+ * Tappable cards open the detail modal (handled by parent via onStopTap).
  */
 export default function DigitalPassport({
   hunt,
@@ -15,25 +16,23 @@ export default function DigitalPassport({
 }) {
   const passportRef = useRef(null);
   const collectedIds = new Set(collected.map((c) => c.stopId));
-  const totalStops = stops.filter((s) => !s.isBonus).length;
+  const activeStops = stops.filter((s) => s.is_active !== false);
+  const baseStops = activeStops.filter((s) => !s.isBonus);
+  const bonusStops = activeStops.filter((s) => s.isBonus);
   const collectedCount = [...collectedIds].filter(
-    (id) => stops.find((s) => s.id === id && !s.isBonus)
+    (id) => baseStops.find((s) => s.id === id)
   ).length;
+  const totalStops = baseStops.length;
   const allCollected = totalStops > 0 && collectedCount >= totalStops;
-  const bonusStop = stops.find((s) => s.isBonus);
-  const bonusCollected = bonusStop ? collectedIds.has(bonusStop.id) : false;
 
   const handleShare = useCallback(async () => {
-    // Render the SVG map to a canvas for sharing
-    const svgEl = passportRef.current?.querySelector('svg');
-    if (!svgEl) return;
-
     try {
+      const svgEl = passportRef.current?.querySelector('svg');
+      if (!svgEl) return;
       const svgData = new XMLSerializer().serializeToString(svgEl);
       const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(svgBlob);
       const img = new Image();
-
       img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width * 2;
@@ -44,14 +43,13 @@ export default function DigitalPassport({
         ctx.fillRect(0, 0, img.width, img.height);
         ctx.drawImage(img, 0, 0);
         URL.revokeObjectURL(url);
-
         canvas.toBlob((blob) => {
           if (!blob) return;
           const file = new File([blob], 'mbs-passport.png', { type: 'image/png' });
           if (navigator.share && navigator.canShare?.({ files: [file] })) {
             navigator.share({
               title: `${hunt.name} — Digital Passport`,
-              text: `I completed the ${hunt.name} scavenger hunt! 🎨`,
+              text: `I found ${collectedCount}/${totalStops} characters in the ${hunt.name}! 🎨`,
               files: [file],
             });
           } else {
@@ -64,14 +62,12 @@ export default function DigitalPassport({
           }
         }, 'image/png');
       };
-
       img.src = url;
     } catch {
-      // Fallback: simple text share
       if (navigator.share) {
         navigator.share({
           title: `${hunt.name} — Digital Passport`,
-          text: `I collected ${collectedCount}/${totalStops} stops in the ${hunt.name} scavenger hunt! 🎨`,
+          text: `I found ${collectedCount}/${totalStops} characters in the ${hunt.name}! 🎨`,
         });
       }
     }
@@ -81,7 +77,7 @@ export default function DigitalPassport({
     <div className="space-y-5">
       {/* Passport card */}
       <div ref={passportRef} className="bg-cream-50 rounded-card border-2 border-primary-300 shadow-lg overflow-hidden">
-        {/* Passport header */}
+        {/* Header */}
         <div className="bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 px-5 py-4 text-center">
           <p className="text-primary-200 text-xs font-bold uppercase tracking-widest mb-1">
             Digital Passport
@@ -98,79 +94,57 @@ export default function DigitalPassport({
         {/* Map */}
         <div className="p-3">
           <OldMillMap
-            stops={stops}
+            stops={activeStops}
             collectedIds={[...collectedIds]}
             onStopTap={onStopTap}
           />
         </div>
 
-        {/* Stamp collection grid */}
+        {/* Card collection grid */}
         <div className="px-4 pb-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display text-sm text-surface-700">Stamp Collection</h3>
+            <h3 className="font-display text-sm text-surface-700">Card Collection</h3>
             <span className="text-xs font-bold text-primary-600">
               {collectedCount}/{totalStops}
             </span>
           </div>
-          <div className="grid grid-cols-5 gap-2">
-            {stops.filter((s) => !s.isBonus).map((stop, i) => {
+
+          {/* Responsive grid: 4 cols on small, 5 on medium, 6 on large */}
+          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+            {baseStops.map((stop) => {
               const isFound = collectedIds.has(stop.id);
               const entry = collected.find((c) => c.stopId === stop.id);
-              const hasPhoto = entry?.playerPhotoUrl;
               return (
-                <button
+                <CharacterCard
                   key={stop.id}
+                  stop={stop}
+                  isCollected={isFound}
+                  size="sm"
                   onClick={() => onStopTap?.(stop)}
-                  className={`aspect-square rounded-xl overflow-hidden flex flex-col items-center justify-center text-center transition-all ${
-                    isFound
-                      ? 'border-2 border-nature-400 shadow-sm'
-                      : 'bg-cream-200 border-2 border-cream-400 opacity-50'
-                  }`}
-                >
-                  {hasPhoto ? (
-                    <img
-                      src={entry.playerPhotoUrl}
-                      alt={stop.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <>
-                      <span className={`text-lg ${isFound ? '' : 'grayscale opacity-40'}`}>
-                        {isFound ? '🎨' : '❓'}
-                      </span>
-                      <span className={`text-[10px] font-bold mt-0.5 leading-tight px-0.5 ${
-                        isFound ? 'text-nature-700' : 'text-surface-500'
-                      }`}>
-                        {isFound ? stop.name.split(' ').slice(0, 2).join(' ') : `#${i + 1}`}
-                      </span>
-                    </>
-                  )}
-                </button>
+                  playerPhoto={entry?.playerPhotoUrl}
+                />
               );
             })}
           </div>
 
-          {/* Bonus stop */}
-          {bonusStop && (
+          {/* Bonus section */}
+          {bonusStops.length > 0 && (
             <div className="mt-3">
-              <button
-                onClick={() => onStopTap?.(bonusStop)}
-                className={`w-full flex items-center gap-3 rounded-xl p-3 transition-all ${
-                  bonusCollected
-                    ? 'bg-secondary-100 border-2 border-secondary-400'
-                    : 'bg-cream-200 border-2 border-dashed border-cream-400 opacity-60'
-                }`}
-              >
-                <span className="text-2xl">{bonusCollected ? '⭐' : '🔒'}</span>
-                <div className="text-left flex-1">
-                  <p className={`text-sm font-bold ${bonusCollected ? 'text-secondary-700' : 'text-surface-400'}`}>
-                    {bonusCollected ? bonusStop.name : 'Bonus Stop'}
-                  </p>
-                  <p className="text-xs text-surface-400">
-                    {bonusCollected ? 'Bonus unlocked!' : 'Find the pop-up shop for a surprise!'}
-                  </p>
-                </div>
-              </button>
+              <p className="text-xs font-bold text-secondary-600 uppercase tracking-wider mb-2">Bonus</p>
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+                {bonusStops.map((stop) => {
+                  const isFound = collectedIds.has(stop.id);
+                  return (
+                    <CharacterCard
+                      key={stop.id}
+                      stop={stop}
+                      isCollected={isFound}
+                      size="sm"
+                      onClick={() => onStopTap?.(stop)}
+                    />
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
@@ -179,17 +153,17 @@ export default function DigitalPassport({
         {allCollected && (
           <div className="bg-gradient-to-r from-secondary-300 via-primary-300 to-nature-300 px-5 py-3 text-center">
             <p className="font-display text-white text-lg drop-shadow-sm">
-              Hunt Complete!
+              All Characters Found!
             </p>
           </div>
         )}
       </div>
 
       {/* Share button */}
-      {allCollected && (
+      {collectedCount > 0 && (
         <button
           onClick={handleShare}
-          className="w-full bg-primary-500 text-white font-display text-lg py-3.5 rounded-button shadow-lg hover:bg-primary-600 active:scale-[0.98] transition-all"
+          className="w-full bg-primary-500 text-white font-display text-base py-3 rounded-button shadow-lg hover:bg-primary-600 active:scale-[0.98] transition-all"
         >
           Share Your Passport
         </button>
