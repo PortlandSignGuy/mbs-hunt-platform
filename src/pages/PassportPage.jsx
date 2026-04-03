@@ -12,7 +12,6 @@ export default function PassportPage() {
   const collected = usePlayerStore((s) => s.getCollected(activeHuntId));
   const addToast = useUiStore((s) => s.addToast);
 
-  if (!player) return <Navigate to="/join" replace />;
   if (!hunt) return <Navigate to="/" replace />;
 
   const stops = hunt.stops || [];
@@ -39,7 +38,7 @@ export default function PassportPage() {
         hunt={hunt}
         stops={stops}
         collected={collected}
-        playerName={player.name}
+        playerName={player?.name}
         onStopTap={handleStopTap}
       />
     </div>

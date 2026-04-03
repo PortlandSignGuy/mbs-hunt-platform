@@ -16,7 +16,9 @@ export default function ScanPage() {
   const addToast = useUiStore((s) => s.addToast);
   const [justCollected, setJustCollected] = useState(false);
 
+  // Require registration to collect (QR scan landing)
   if (!player) return <Navigate to="/join" replace />;
+  // Note: this redirect is intentional for scan — you must register to collect
 
   // Find the stop across all hunts
   let stop = null;
