@@ -30,6 +30,7 @@ function Toast({ toast, onDismiss }) {
       <button
         onClick={() => onDismiss(toast.id)}
         className="text-current opacity-50 hover:opacity-100 transition-opacity"
+        aria-label="Dismiss notification"
       >
         ✕
       </button>

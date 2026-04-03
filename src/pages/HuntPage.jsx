@@ -81,7 +81,7 @@ export default function HuntPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-display text-surface-800 text-sm">{stop.name}</h3>
                   {stop.hint && !found && (
-                    <p className="text-surface-400 text-xs mt-0.5 truncate">{stop.hint}</p>
+                    <p className="text-surface-500 text-xs mt-0.5 truncate">{stop.hint}</p>
                   )}
                 </div>
                 {found && (

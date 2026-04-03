@@ -36,7 +36,7 @@ function ErrorFallback({ error }) {
           </pre>
         )}
         <Link
-          to="/home"
+          to="/"
           className="inline-block bg-primary-500 text-white font-bold px-6 py-2.5 rounded-button hover:bg-primary-600 transition-colors no-underline"
         >
           Back to Home

@@ -20,6 +20,8 @@ export default function OldMillMap({ stops, collectedIds, onStopTap }) {
         viewBox="0 0 500 400"
         className="w-full h-auto"
         style={{ background: '#faf8eb' }}
+        role="img"
+        aria-label="Illustrated map of Old Mill District showing scavenger hunt stop locations"
       >
         {/* ── Background fill ── */}
         <rect width="500" height="400" fill="#faf8eb" />
@@ -118,9 +120,11 @@ export default function OldMillMap({ stops, collectedIds, onStopTap }) {
             <g
               key={stop.id}
               onClick={() => onStopTap?.(stop)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStopTap?.(stop); } }}
               className="cursor-pointer"
               role="button"
               tabIndex={0}
+              aria-label={`${stop.name}${isCollected ? ' — collected' : ' — not yet found'}`}
             >
               {/* Glow ring for collected */}
               {isCollected && (

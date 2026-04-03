@@ -1,10 +1,11 @@
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { usePlayerStore } from '../stores/playerStore.js';
 import { useHuntStore } from '../stores/huntStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 import DigitalPassport from '../components/hunt/DigitalPassport.jsx';
 
 export default function PassportPage() {
+  const navigate = useNavigate();
   const player = usePlayerStore((s) => s.player);
   const activeHuntId = usePlayerStore((s) => s.activeHuntId);
   const hunt = useHuntStore((s) => s.hunts.find((h) => h.id === activeHuntId));
@@ -21,7 +22,7 @@ export default function PassportPage() {
     if (isFound) {
       addToast({ type: 'info', message: `${stop.name} — already collected!` });
     } else {
-      addToast({ type: 'info', message: `${stop.name} — scan the QR code to collect!` });
+      navigate(`/scan/${stop.slug || stop.id}`);
     }
   }
 

@@ -128,8 +128,8 @@ export default function DigitalPassport({
                   <span className={`text-lg ${isFound ? '' : 'grayscale opacity-40'}`}>
                     {isFound ? '🎨' : '❓'}
                   </span>
-                  <span className={`text-[8px] font-bold mt-0.5 leading-tight px-0.5 ${
-                    isFound ? 'text-nature-700' : 'text-surface-400'
+                  <span className={`text-[10px] font-bold mt-0.5 leading-tight px-0.5 ${
+                    isFound ? 'text-nature-700' : 'text-surface-500'
                   }`}>
                     {isFound ? stop.name.split(' ').slice(0, 2).join(' ') : `#${i + 1}`}
                   </span>
