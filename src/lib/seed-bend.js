@@ -225,8 +225,9 @@ const BEND_HUNT = {
   ],
 };
 
-export function loadBendSeedData() {
+export function loadBendSeedData(force = false) {
   const store = useHuntStore.getState();
+  if (force) store.removeHunt(BEND_HUNT.id);
   if (store.hunts.some((h) => h.id === BEND_HUNT.id)) return false;
   store.addHunt(BEND_HUNT);
   return true;

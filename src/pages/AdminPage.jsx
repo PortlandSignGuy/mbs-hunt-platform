@@ -74,17 +74,13 @@ export default function AdminPage() {
         <div className="flex gap-2">
           <button
             onClick={() => {
-              const p = loadSeedData();
-              const b = loadBendSeedData();
-              if (p || b) {
-                addToast({ type: 'success', message: 'Demo hunts loaded!' });
-              } else {
-                addToast({ type: 'info', message: 'Demo data already loaded.' });
-              }
+              loadSeedData(true);
+              loadBendSeedData(true);
+              addToast({ type: 'success', message: 'Demo data refreshed!' });
             }}
             className="bg-secondary-400 text-surface-900 font-bold px-4 py-2 rounded-button shadow-sm hover:bg-secondary-500 transition-colors text-sm"
           >
-            Load Demo
+            Refresh Demo
           </button>
           <button
             onClick={() => setShowNewHunt(true)}

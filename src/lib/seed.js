@@ -189,8 +189,9 @@ const DEMO_HUNT = {
 /**
  * Load the demo hunt into the store. Skips if already loaded.
  */
-export function loadSeedData() {
+export function loadSeedData(force = false) {
   const store = useHuntStore.getState();
+  if (force) store.removeHunt(DEMO_HUNT.id);
   if (store.hunts.some((h) => h.id === DEMO_HUNT.id)) return false;
   store.addHunt(DEMO_HUNT);
   return true;
