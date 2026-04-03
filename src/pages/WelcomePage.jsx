@@ -25,8 +25,8 @@ export default function WelcomePage() {
           Mike Bennett<br />Scavenger Hunts
         </h1>
         <p className="text-lg text-surface-600 max-w-md mx-auto leading-relaxed">
-          Discover public art in your city! Scan QR codes, collect all 15 photos,
-          and unlock an exclusive coloring page.
+          Discover hidden animal characters in your city! Scan QR codes, collect
+          every character card, and unlock an exclusive coloring page.
         </p>
         {!player && (
           <Link
@@ -53,7 +53,7 @@ export default function WelcomePage() {
           <div className="space-y-4">
             {published.map((hunt) => {
               const collected = collections[hunt.id] || [];
-              const baseStops = (hunt.stops || []).filter((s) => !s.isBonus);
+              const baseStops = (hunt.stops || []).filter((s) => !s.isBonus && s.is_active !== false);
               const totalStops = baseStops.length;
               const collectedBase = collected.filter(
                 (c) => baseStops.some((s) => s.id === c.stopId)

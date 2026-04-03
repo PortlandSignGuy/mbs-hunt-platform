@@ -11,7 +11,8 @@ export default function HuntPage() {
   // No active hunt selected — go back to pick one
   if (!hunt) return <Navigate to="/" replace />;
 
-  const stops = hunt.stops || [];
+  const allStops = hunt.stops || [];
+  const stops = allStops.filter((s) => s.is_active !== false);
   const collectedIds = new Set(collected.map((c) => c.stopId));
   const totalStops = stops.filter((s) => !s.isBonus).length;
   const collectedCount = [...collectedIds].filter(

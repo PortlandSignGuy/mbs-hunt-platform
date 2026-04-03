@@ -21,18 +21,34 @@ create table if not exists hunts (
 );
 
 -- ── 2. Stops ────────────────────────────────────────────────
--- Individual QR-scannable locations within a hunt
+-- Individual QR-scannable locations within a hunt, each featuring an animal character
 create table if not exists stops (
-  id          uuid primary key default gen_random_uuid(),
-  hunt_id     uuid not null references hunts(id) on delete cascade,
-  slug        text not null,                 -- unique within hunt, used in QR URL
-  name        text not null,
-  hint        text default '',
-  artist      text default '',
-  description text default '',
-  photo_url   text,                          -- reveal image after scan
-  sort_order  int default 0,
-  created_at  timestamptz default now(),
+  id                  uuid primary key default gen_random_uuid(),
+  hunt_id             uuid not null references hunts(id) on delete cascade,
+  slug                text not null,                 -- unique within hunt, used in QR URL
+  name                text not null,                 -- location name (hidden until collected)
+  hint                text default '',
+  artist              text default '',
+  description         text default '',
+  photo_url           text,                          -- reveal image after scan
+  sort_order          int default 0,
+  -- Character card fields
+  character_name      text default '',               -- "Captain Coral" (hidden until collected)
+  character_species   text default '',               -- "Sea Turtle" (visible as clue)
+  animal_fun_fact_1   text default '',               -- Fun fact shown as clue
+  animal_fun_fact_2   text default '',               -- Second fun fact shown as clue
+  riddle_clue         text default '',               -- Riddle to find the location
+  character_backstory text default '',               -- Full story (revealed on collect)
+  mike_note           text default '',               -- Quote from Mike about creating this character
+  silhouette_url      text,                          -- Mystery silhouette image
+  card_art_url        text,                          -- Full color character card art
+  prompt              text default '',               -- Photo moment prompt
+  sponsor_business    text default '',               -- Business sponsoring this stop
+  install_type        text default '',               -- Asphalt Art, Window Cling, Double Post Mount, Wall Mount, etc.
+  placement_notes     text default '',               -- Where exactly the installation is
+  is_bonus            boolean default false,
+  is_active           boolean default true,          -- false for TBD/placeholder stops
+  created_at          timestamptz default now(),
   unique (hunt_id, slug)
 );
 
