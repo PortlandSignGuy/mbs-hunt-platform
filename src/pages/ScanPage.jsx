@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
 import { usePlayerStore, useCollected } from '../stores/playerStore.js';
@@ -18,11 +18,9 @@ export default function ScanPage() {
   const addToast = useUiStore((s) => s.addToast);
   const addPhoto = usePlayerStore((s) => s.addPhoto);
 
-  const [justCollected, setJustCollected] = useState(false);
-  const [showFlip, setShowFlip] = useState(false);
+  const [phase, setPhase] = useState('ready'); // ready | fadeout | revealed
   const [photoSaved, setPhotoSaved] = useState(false);
 
-  // Require registration to collect
   if (!player) return <Navigate to="/join" replace />;
 
   // Find the stop
@@ -32,7 +30,6 @@ export default function ScanPage() {
   if (hunt) {
     stop = hunt.stops?.find((s) => s.id === slug || s.slug === slug);
   }
-
   if (!stop) {
     for (const h of hunts) {
       const found = h.stops?.find((s) => s.id === slug || s.slug === slug);
@@ -64,7 +61,7 @@ export default function ScanPage() {
   const currentCount = huntCollected.filter(
     (c) => baseStops.some((s) => s.id === c.stopId)
   ).length;
-  const newCount = currentCount + (alreadyCollected || justCollected ? 0 : 1);
+  const newCount = currentCount + (alreadyCollected || phase !== 'ready' ? 0 : 1);
   const allDone = newCount >= totalStops;
 
   function handleCollect() {
@@ -74,82 +71,22 @@ export default function ScanPage() {
       photoUrl: stop.photoUrl || null,
       collectedAt: new Date().toISOString(),
     });
-    setJustCollected(true);
 
-    // Trigger flip animation after a brief delay
-    setTimeout(() => setShowFlip(true), 300);
+    // Animate: mystery fades out → revealed card scales in
+    setPhase('fadeout');
+    setTimeout(() => setPhase('revealed'), 350);
 
     if (allDone) {
       addToast({ type: 'success', message: 'You found them all!' });
     } else {
-      addToast({ type: 'success', message: `${stop.character_name || stop.character_species} found! (${newCount}/${totalStops})` });
+      addToast({ type: 'success', message: `${stop.character_name || stop.character_species} found!` });
     }
   }
 
   return (
     <div className="max-w-md mx-auto space-y-4">
-      {/* Card flip reveal */}
-      {justCollected ? (
-        <div className="space-y-4">
-          {/* The flip card */}
-          <CharacterCard
-            stop={stop}
-            isCollected={showFlip}
-            isFlipping={true}
-            size="lg"
-          />
-
-          {/* Post-reveal content (shows after flip) */}
-          {showFlip && (
-            <div className="space-y-3 animate-[slideIn_0.3s_ease-out]">
-              {/* Progress */}
-              <div className="bg-nature-100 border-2 border-nature-400 rounded-card p-4 text-center">
-                <p className="text-nature-700 font-display text-lg">Character Found!</p>
-                <p className="text-nature-600 text-sm mt-1">{newCount} of {totalStops} discovered</p>
-                <div className="h-2.5 bg-nature-200 rounded-full overflow-hidden mt-3">
-                  <div
-                    className="h-full bg-gradient-to-r from-primary-400 via-secondary-400 to-nature-400 rounded-full transition-all duration-700"
-                    style={{ width: `${(newCount / totalStops) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Photo moment */}
-              {stop.prompt && !photoSaved && (
-                <PhotoMomentCapture
-                  prompt={stop.prompt}
-                  onSave={(dataUrl) => {
-                    addPhoto(parentHunt.id, stop.id, dataUrl);
-                    setPhotoSaved(true);
-                    addToast({ type: 'success', message: 'Photo saved!' });
-                  }}
-                  onSkip={() => setPhotoSaved(true)}
-                />
-              )}
-
-              {/* Next step */}
-              {(photoSaved || !stop.prompt) && (
-                allDone ? (
-                  <Link
-                    to="/complete"
-                    className="block w-full text-center bg-secondary-400 text-surface-900 font-display text-lg py-3.5 rounded-button shadow-md hover:bg-secondary-500 transition-all no-underline"
-                  >
-                    Claim Your Reward!
-                  </Link>
-                ) : (
-                  <Link
-                    to="/hunt"
-                    className="block w-full text-center bg-primary-500 text-white font-display text-lg py-3.5 rounded-button shadow-md hover:bg-primary-600 transition-all no-underline"
-                  >
-                    Keep Hunting! ({totalStops - newCount} left)
-                  </Link>
-                )
-              )}
-            </div>
-          )}
-        </div>
-      ) : alreadyCollected ? (
-        /* Already collected state */
+      {/* ── Already collected ── */}
+      {alreadyCollected && phase === 'ready' ? (
         <div className="space-y-4">
           <CharacterCard stop={stop} isCollected={true} size="lg" />
           <div className="bg-nature-50 border border-nature-300 rounded-card p-4 text-center">
@@ -162,8 +99,8 @@ export default function ScanPage() {
             ← View All Characters
           </Link>
         </div>
-      ) : (
-        /* Collect state — show mystery card + collect button */
+      ) : phase === 'ready' ? (
+        /* ── Ready to collect — show mystery card ── */
         <div className="space-y-4">
           <CharacterCard stop={stop} isCollected={false} size="lg" />
 
@@ -184,6 +121,62 @@ export default function ScanPage() {
           >
             ← View All Characters
           </Link>
+        </div>
+      ) : phase === 'fadeout' ? (
+        /* ── Fade out mystery card ── */
+        <div className="animate-card-fadeout">
+          <CharacterCard stop={stop} isCollected={false} size="lg" />
+        </div>
+      ) : (
+        /* ── Revealed! ── */
+        <div className="space-y-4">
+          <div className="animate-card-reveal">
+            <CharacterCard stop={stop} isCollected={true} size="lg" />
+          </div>
+
+          {/* Progress */}
+          <div className="bg-nature-100 border-2 border-nature-400 rounded-card p-4 text-center">
+            <p className="text-nature-700 font-display text-lg">Character Found!</p>
+            <p className="text-nature-600 text-sm mt-1">{newCount} of {totalStops} discovered</p>
+            <div className="h-2.5 bg-nature-200 rounded-full overflow-hidden mt-3">
+              <div
+                className="h-full bg-gradient-to-r from-primary-400 via-secondary-400 to-nature-400 rounded-full transition-all duration-700"
+                style={{ width: `${(newCount / totalStops) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Photo moment */}
+          {stop.prompt && !photoSaved && (
+            <PhotoMomentCapture
+              prompt={stop.prompt}
+              onSave={(dataUrl) => {
+                addPhoto(parentHunt.id, stop.id, dataUrl);
+                setPhotoSaved(true);
+                addToast({ type: 'success', message: 'Photo saved!' });
+              }}
+              onSkip={() => setPhotoSaved(true)}
+            />
+          )}
+
+          {/* Next step */}
+          {(photoSaved || !stop.prompt) && (
+            allDone ? (
+              <Link
+                to="/complete"
+                className="block w-full text-center bg-secondary-400 text-surface-900 font-display text-lg py-3.5 rounded-button shadow-md hover:bg-secondary-500 transition-all no-underline"
+              >
+                Claim Your Reward!
+              </Link>
+            ) : (
+              <Link
+                to="/hunt"
+                className="block w-full text-center bg-primary-500 text-white font-display text-lg py-3.5 rounded-button shadow-md hover:bg-primary-600 transition-all no-underline"
+              >
+                Keep Hunting! ({totalStops - newCount} left)
+              </Link>
+            )
+          )}
         </div>
       )}
     </div>
