@@ -115,24 +115,36 @@ export default function DigitalPassport({
           <div className="grid grid-cols-5 gap-2">
             {stops.filter((s) => !s.isBonus).map((stop, i) => {
               const isFound = collectedIds.has(stop.id);
+              const entry = collected.find((c) => c.stopId === stop.id);
+              const hasPhoto = entry?.playerPhotoUrl;
               return (
                 <button
                   key={stop.id}
                   onClick={() => onStopTap?.(stop)}
-                  className={`aspect-square rounded-xl flex flex-col items-center justify-center text-center transition-all ${
+                  className={`aspect-square rounded-xl overflow-hidden flex flex-col items-center justify-center text-center transition-all ${
                     isFound
-                      ? 'bg-nature-100 border-2 border-nature-400 shadow-sm'
+                      ? 'border-2 border-nature-400 shadow-sm'
                       : 'bg-cream-200 border-2 border-cream-400 opacity-50'
                   }`}
                 >
-                  <span className={`text-lg ${isFound ? '' : 'grayscale opacity-40'}`}>
-                    {isFound ? '🎨' : '❓'}
-                  </span>
-                  <span className={`text-[10px] font-bold mt-0.5 leading-tight px-0.5 ${
-                    isFound ? 'text-nature-700' : 'text-surface-500'
-                  }`}>
-                    {isFound ? stop.name.split(' ').slice(0, 2).join(' ') : `#${i + 1}`}
-                  </span>
+                  {hasPhoto ? (
+                    <img
+                      src={entry.playerPhotoUrl}
+                      alt={stop.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      <span className={`text-lg ${isFound ? '' : 'grayscale opacity-40'}`}>
+                        {isFound ? '🎨' : '❓'}
+                      </span>
+                      <span className={`text-[10px] font-bold mt-0.5 leading-tight px-0.5 ${
+                        isFound ? 'text-nature-700' : 'text-surface-500'
+                      }`}>
+                        {isFound ? stop.name.split(' ').slice(0, 2).join(' ') : `#${i + 1}`}
+                      </span>
+                    </>
+                  )}
                 </button>
               );
             })}

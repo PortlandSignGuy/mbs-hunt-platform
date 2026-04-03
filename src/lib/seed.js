@@ -27,6 +27,7 @@ const DEMO_HUNT = {
       description: 'Second-largest copper repoussé statue in the US, greeting visitors to the Portland Building.',
       photoUrl: null,
       sortOrder: 1,
+      prompt: 'Mimic her pose — crouch down and reach!',
     },
     {
       id: 'STP-002',
@@ -37,6 +38,7 @@ const DEMO_HUNT = {
       description: 'A life-sized bronze gentleman extending an umbrella — a perfect Portland icon.',
       photoUrl: null,
       sortOrder: 2,
+      prompt: 'Pretend he\'s sharing his umbrella with you!',
     },
     {
       id: 'STP-003',
@@ -47,6 +49,7 @@ const DEMO_HUNT = {
       description: 'A bronze deer figure mid-dance, celebrating the wildlife of the Pacific Northwest.',
       photoUrl: null,
       sortOrder: 3,
+      prompt: 'Do your best deer dance!',
     },
     {
       id: 'STP-004',
@@ -57,6 +60,7 @@ const DEMO_HUNT = {
       description: 'An interactive fountain with three computer-controlled water displays.',
       photoUrl: null,
       sortOrder: 4,
+      prompt: 'Get splashed! (or pretend to)',
     },
     {
       id: 'STP-005',
@@ -67,6 +71,7 @@ const DEMO_HUNT = {
       description: 'A vibrant mural celebrating community joy and public art.',
       photoUrl: null,
       sortOrder: 5,
+      prompt: 'Become part of the mural — match a color!',
     },
     {
       id: 'STP-006',
@@ -77,6 +82,7 @@ const DEMO_HUNT = {
       description: 'The iconic neon sign that became a rallying cry for Portland\'s creative spirit.',
       photoUrl: null,
       sortOrder: 6,
+      prompt: 'Show us YOUR weird — make the weirdest face you can!',
     },
     {
       id: 'STP-007',
@@ -87,6 +93,7 @@ const DEMO_HUNT = {
       description: 'Playful bronze animals splashing in a public fountain.',
       photoUrl: null,
       sortOrder: 7,
+      prompt: 'Splash around with the bronze animals!',
     },
     {
       id: 'STP-008',
@@ -97,6 +104,7 @@ const DEMO_HUNT = {
       description: 'A monumental sculpture celebrating peace and diverse voices.',
       photoUrl: null,
       sortOrder: 8,
+      prompt: 'Strike a peaceful pose next to the column!',
     },
     {
       id: 'STP-009',
@@ -107,6 +115,7 @@ const DEMO_HUNT = {
       description: 'A community-created art installation celebrating craft and connection.',
       photoUrl: null,
       sortOrder: 9,
+      prompt: 'Pretend you\'re tangled in yarn!',
     },
     {
       id: 'STP-010',
@@ -117,6 +126,7 @@ const DEMO_HUNT = {
       description: 'At just 452 square inches, it\'s a Guinness World Record holder.',
       photoUrl: null,
       sortOrder: 10,
+      prompt: 'Can you fit in the world\'s smallest park?',
     },
     {
       id: 'STP-011',
@@ -127,6 +137,7 @@ const DEMO_HUNT = {
       description: 'Miniature toy horses attached to historic horse rings across the city.',
       photoUrl: null,
       sortOrder: 11,
+      prompt: 'Find a tiny horse and take a selfie with it!',
     },
     {
       id: 'STP-012',
@@ -137,6 +148,7 @@ const DEMO_HUNT = {
       description: 'A rotating gallery of street art from Portland\'s vibrant mural scene.',
       photoUrl: null,
       sortOrder: 12,
+      prompt: 'Stand in front of your favorite section of the mural!',
     },
     {
       id: 'STP-013',
@@ -147,6 +159,7 @@ const DEMO_HUNT = {
       description: 'The moss-covered remains of a 1930s stone restroom, now a beloved urban legend.',
       photoUrl: null,
       sortOrder: 13,
+      prompt: 'Your spookiest witch pose!',
     },
     {
       id: 'STP-014',
@@ -157,6 +170,7 @@ const DEMO_HUNT = {
       description: 'The dramatic gothic arches of the St. Johns Bridge create a cathedral-like space in the park below.',
       photoUrl: null,
       sortOrder: 14,
+      prompt: 'Frame yourself inside one of the gothic arches!',
     },
     {
       id: 'STP-015',
@@ -167,6 +181,7 @@ const DEMO_HUNT = {
       description: 'Mike Bennett\'s imaginative mini golf experience — the final stop on your art adventure!',
       photoUrl: null,
       sortOrder: 15,
+      prompt: 'Your best mini golf victory celebration!',
     },
   ],
 };

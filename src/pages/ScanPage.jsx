@@ -3,6 +3,7 @@ import { useParams, Navigate, Link } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
 import { usePlayerStore, useCollected } from '../stores/playerStore.js';
 import { useUiStore } from '../stores/uiStore.js';
+import PhotoMomentCapture from '../components/hunt/PhotoMomentCapture.jsx';
 
 export default function ScanPage() {
   const { slug } = useParams();
@@ -15,6 +16,8 @@ export default function ScanPage() {
   const collected = useCollected(activeHuntId);
   const addToast = useUiStore((s) => s.addToast);
   const [justCollected, setJustCollected] = useState(false);
+  const [photoSaved, setPhotoSaved] = useState(false);
+  const addPhoto = usePlayerStore((s) => s.addPhoto);
 
   // Require registration to collect (QR scan landing)
   if (!player) return <Navigate to="/join" replace />;
@@ -120,21 +123,43 @@ export default function ScanPage() {
                 />
               </div>
 
-              {/* Next step */}
-              {allDone ? (
-                <Link
-                  to="/complete"
-                  className="block w-full bg-secondary-400 text-surface-900 font-display text-lg py-3 rounded-button shadow-md hover:bg-secondary-500 transition-all no-underline"
-                >
-                  Claim Your Reward!
-                </Link>
-              ) : (
-                <Link
-                  to="/hunt"
-                  className="block w-full bg-primary-500 text-white font-display text-lg py-3 rounded-button shadow-md hover:bg-primary-600 transition-all no-underline"
-                >
-                  Keep Hunting! ({totalStops - newCount} left)
-                </Link>
+              {/* Photo Moment — show if stop has a prompt and photo not yet saved */}
+              {stop.prompt && !photoSaved && (
+                <PhotoMomentCapture
+                  prompt={stop.prompt}
+                  onSave={(dataUrl) => {
+                    addPhoto(parentHunt.id, stop.id, dataUrl);
+                    setPhotoSaved(true);
+                    addToast({ type: 'success', message: 'Photo saved!' });
+                  }}
+                  onSkip={() => setPhotoSaved(true)}
+                />
+              )}
+
+              {/* Photo saved confirmation */}
+              {photoSaved && collected.find((c) => c.stopId === stop.id)?.playerPhotoUrl && (
+                <div className="bg-primary-50 border border-primary-200 rounded-card p-3 text-center">
+                  <p className="text-primary-600 text-sm font-bold">📸 Photo Moment saved!</p>
+                </div>
+              )}
+
+              {/* Next step — show after photo saved/skipped, or if no prompt */}
+              {(photoSaved || !stop.prompt) && (
+                allDone ? (
+                  <Link
+                    to="/complete"
+                    className="block w-full text-center bg-secondary-400 text-surface-900 font-display text-lg py-3 rounded-button shadow-md hover:bg-secondary-500 transition-all no-underline"
+                  >
+                    Claim Your Reward!
+                  </Link>
+                ) : (
+                  <Link
+                    to="/hunt"
+                    className="block w-full text-center bg-primary-500 text-white font-display text-lg py-3 rounded-button shadow-md hover:bg-primary-600 transition-all no-underline"
+                  >
+                    Keep Hunting! ({totalStops - newCount} left)
+                  </Link>
+                )
               )}
             </div>
           ) : alreadyCollected ? (

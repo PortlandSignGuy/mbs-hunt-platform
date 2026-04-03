@@ -44,6 +44,23 @@ export const usePlayerStore = create(
             },
           };
         }),
+
+      /** Attach a player photo to a collected stop */
+      addPhoto: (huntId, stopId, photoDataUrl) =>
+        set((s) => {
+          const items = s.collections[huntId];
+          if (!items) return s;
+          return {
+            collections: {
+              ...s.collections,
+              [huntId]: items.map((c) =>
+                c.stopId === stopId
+                  ? { ...c, playerPhotoUrl: photoDataUrl, photoUploadedAt: new Date().toISOString() }
+                  : c,
+              ),
+            },
+          };
+        }),
     }),
     { name: 'mbs-player' },
   ),

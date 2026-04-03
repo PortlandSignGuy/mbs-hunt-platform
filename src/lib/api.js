@@ -96,4 +96,26 @@ export const api = {
     await delay();
     return usePlayerStore.getState().collections[huntSlug] || [];
   },
+
+  /* ── Photo Moments ── */
+  async uploadPhoto(huntId, stopId, file) {
+    if (isRemote) {
+      const player = usePlayerStore.getState().player;
+      const path = `hunts/${huntId}/${stopId}/${player.email}_${Date.now()}.jpg`;
+      const { error: uploadErr } = await supabase.storage
+        .from('photos')
+        .upload(path, file, { contentType: 'image/jpeg' });
+      if (uploadErr) throw uploadErr;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('photos')
+        .getPublicUrl(path);
+
+      usePlayerStore.getState().addPhoto(huntId, stopId, publicUrl);
+      return publicUrl;
+    }
+    // Local mode: base64 already saved to store by the component
+    await delay();
+    return null;
+  },
 };

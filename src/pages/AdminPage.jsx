@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useHuntStore } from '../stores/huntStore.js';
+import { usePlayerStore } from '../stores/playerStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 import { genId } from '../lib/ids.js';
 import { loadSeedData } from '../lib/seed.js';
@@ -240,6 +241,70 @@ export default function AdminPage() {
           ))}
         </div>
       )}
+      {/* Photo Moments Feed */}
+      <PhotoFeed hunts={hunts} />
     </div>
+  );
+}
+
+function PhotoFeed({ hunts }) {
+  const collections = usePlayerStore((s) => s.collections);
+
+  // Gather all photos across all hunts
+  const photos = [];
+  for (const [huntId, items] of Object.entries(collections)) {
+    const hunt = hunts.find((h) => h.id === huntId);
+    if (!hunt) continue;
+    for (const item of items) {
+      if (!item.playerPhotoUrl) continue;
+      const stop = hunt.stops?.find((s) => s.id === item.stopId);
+      photos.push({
+        key: `${huntId}-${item.stopId}`,
+        huntName: hunt.name,
+        stopName: item.stopName,
+        prompt: stop?.prompt || '',
+        photoUrl: item.playerPhotoUrl,
+        collectedAt: item.collectedAt,
+        uploadedAt: item.photoUploadedAt,
+      });
+    }
+  }
+
+  photos.sort((a, b) => (b.uploadedAt || b.collectedAt).localeCompare(a.uploadedAt || a.collectedAt));
+
+  return (
+    <section className="bg-cream-50 rounded-card shadow-sm border border-cream-400 p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-display text-lg text-surface-800">Player Photo Moments</h2>
+        <span className="text-xs font-bold text-surface-500">{photos.length} photos</span>
+      </div>
+
+      {photos.length === 0 ? (
+        <div className="text-center py-8">
+          <div className="text-4xl mb-2">📸</div>
+          <p className="text-surface-400 font-semibold">No photos yet.</p>
+          <p className="text-surface-400 text-sm">Players will share their photo moments here!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {photos.map((photo) => (
+            <div key={photo.key} className="relative group rounded-lg overflow-hidden bg-cream-200">
+              <img
+                src={photo.photoUrl}
+                alt={`Photo at ${photo.stopName}`}
+                className="w-full h-32 object-cover"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2">
+                <p className="text-white text-xs font-bold text-center">{photo.stopName}</p>
+                {photo.prompt && (
+                  <p className="text-white/70 text-[10px] text-center mt-1 italic">"{photo.prompt}"</p>
+                )}
+                <p className="text-white/50 text-[10px] mt-1">{photo.huntName}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

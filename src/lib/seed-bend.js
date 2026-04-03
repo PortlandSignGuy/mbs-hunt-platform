@@ -34,6 +34,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 1,
       mapX: 82, mapY: 12,
+      prompt: 'Strike your best movie star pose!',
     },
     {
       id: 'STP-BEND-02',
@@ -45,6 +46,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 2,
       mapX: 52, mapY: 16,
+      prompt: 'Show us your "just checked in" vacation face!',
     },
     {
       id: 'STP-BEND-03',
@@ -56,6 +58,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 3,
       mapX: 62, mapY: 22,
+      prompt: 'What flavor would you be? Show us with a face!',
     },
     // ── Central retail corridor ──
     {
@@ -68,6 +71,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 4,
       mapX: 55, mapY: 32,
+      prompt: 'Reveal your hidden artistic side!',
     },
     {
       id: 'STP-BEND-05',
@@ -79,6 +83,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 5,
       mapX: 50, mapY: 36,
+      prompt: 'Jump across an imaginary gap!',
     },
     {
       id: 'STP-BEND-06',
@@ -90,6 +95,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 6,
       mapX: 48, mapY: 40,
+      prompt: 'Give us your best "that smells amazing" reaction!',
     },
     {
       id: 'STP-BEND-07',
@@ -101,6 +107,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 7,
       mapX: 45, mapY: 44,
+      prompt: 'Strike a runway pose!',
     },
     {
       id: 'STP-BEND-08',
@@ -112,6 +119,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 8,
       mapX: 52, mapY: 48,
+      prompt: 'Show us your most dramatic black & white moment!',
     },
     // ── West cluster (near REI / river) ──
     {
@@ -124,6 +132,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 9,
       mapX: 18, mapY: 40,
+      prompt: 'Show us your adventure face!',
     },
     {
       id: 'STP-BEND-10',
@@ -135,6 +144,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 10,
       mapX: 25, mapY: 50,
+      prompt: 'Salute like a sailor!',
     },
     // ── South cluster (river trail / Woodstone Bridge) ──
     {
@@ -147,6 +157,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 11,
       mapX: 38, mapY: 75,
+      prompt: 'Pretend you\'re a salmon jumping upstream!',
     },
     {
       id: 'STP-BEND-12',
@@ -158,6 +169,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 12,
       mapX: 48, mapY: 85,
+      prompt: 'Photo from the middle of the bridge — look both ways!',
     },
     {
       id: 'STP-BEND-13',
@@ -169,6 +181,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 13,
       mapX: 72, mapY: 90,
+      prompt: 'Show us the view from the garden path!',
     },
     // ── East cluster ──
     {
@@ -181,6 +194,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 14,
       mapX: 45, mapY: 55,
+      prompt: 'Look up at the smokestack and give us your best "wow" face!',
     },
     {
       id: 'STP-BEND-15',
@@ -192,6 +206,7 @@ const BEND_HUNT = {
       photoUrl: null,
       sortOrder: 15,
       mapX: 65, mapY: 45,
+      prompt: 'Find something from another country and pose with it!',
     },
     // ── Bonus 16th stop: Pop-Up Merch Shop ──
     {
@@ -205,6 +220,7 @@ const BEND_HUNT = {
       sortOrder: 16,
       mapX: 58, mapY: 62,
       isBonus: true,
+      prompt: 'Selfie with Mike (or his art)! Show us your haul!',
     },
   ],
 };
