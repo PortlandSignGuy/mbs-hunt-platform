@@ -7,7 +7,7 @@ export default function WelcomePage() {
   const hunts = useHuntStore((s) => s.hunts);
   const player = usePlayerStore((s) => s.player);
   const setActiveHunt = usePlayerStore((s) => s.setActiveHunt);
-  const getCollected = usePlayerStore((s) => s.getCollected);
+  const collections = usePlayerStore((s) => s.collections);
 
   function handlePickHunt(hunt) {
     setActiveHunt(hunt.id);
@@ -52,7 +52,7 @@ export default function WelcomePage() {
         ) : (
           <div className="space-y-4">
             {published.map((hunt) => {
-              const collected = getCollected(hunt.id);
+              const collected = collections[hunt.id] || [];
               const totalStops = hunt.stops?.length || 0;
               const pct = totalStops > 0 ? (collected.length / totalStops) * 100 : 0;
               const complete = totalStops > 0 && collected.length >= totalStops;

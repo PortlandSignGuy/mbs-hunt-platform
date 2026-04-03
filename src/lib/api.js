@@ -94,6 +94,6 @@ export const api = {
       return data;
     }
     await delay();
-    return usePlayerStore.getState().getCollected(huntSlug);
+    return usePlayerStore.getState().collections[huntSlug] || [];
   },
 };

@@ -1,12 +1,12 @@
 import { Link, Navigate } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
-import { usePlayerStore } from '../stores/playerStore.js';
+import { usePlayerStore, useCollected } from '../stores/playerStore.js';
 
 export default function HuntPage() {
   const player = usePlayerStore((s) => s.player);
   const activeHuntId = usePlayerStore((s) => s.activeHuntId);
   const hunt = useHuntStore((s) => s.hunts.find((h) => h.id === activeHuntId));
-  const collected = usePlayerStore((s) => s.getCollected(activeHuntId));
+  const collected = useCollected(activeHuntId);
 
   // No active hunt selected — go back to pick one
   if (!hunt) return <Navigate to="/" replace />;

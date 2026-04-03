@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useHuntStore } from '../stores/huntStore.js';
-import { usePlayerStore } from '../stores/playerStore.js';
+import { usePlayerStore, useCollected } from '../stores/playerStore.js';
 import { useUiStore } from '../stores/uiStore.js';
 
 export default function ScanPage() {
@@ -12,7 +12,7 @@ export default function ScanPage() {
   const collectStop = usePlayerStore((s) => s.collectStop);
   const setActiveHunt = usePlayerStore((s) => s.setActiveHunt);
   const hunts = useHuntStore((s) => s.hunts);
-  const collected = usePlayerStore((s) => s.getCollected(activeHuntId));
+  const collected = useCollected(activeHuntId);
   const addToast = useUiStore((s) => s.addToast);
   const [justCollected, setJustCollected] = useState(false);
 
@@ -51,7 +51,8 @@ export default function ScanPage() {
     );
   }
 
-  const huntCollected = usePlayerStore.getState().getCollected(parentHunt.id);
+  const collections = usePlayerStore.getState().collections;
+  const huntCollected = collections[parentHunt.id] || [];
   const alreadyCollected = huntCollected.some((c) => c.stopId === stop.id);
   const totalStops = (parentHunt.stops || []).filter((s) => !s.isBonus).length;
   const currentCount = huntCollected.filter(

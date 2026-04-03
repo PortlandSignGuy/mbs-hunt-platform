@@ -1,12 +1,12 @@
 import { Link, Navigate } from 'react-router-dom';
-import { usePlayerStore } from '../stores/playerStore.js';
+import { usePlayerStore, useCollected } from '../stores/playerStore.js';
 import { useHuntStore } from '../stores/huntStore.js';
 
 export default function CompletePage() {
   const player = usePlayerStore((s) => s.player);
   const activeHuntId = usePlayerStore((s) => s.activeHuntId);
   const hunt = useHuntStore((s) => s.hunts.find((h) => h.id === activeHuntId));
-  const collected = usePlayerStore((s) => s.getCollected(activeHuntId));
+  const collected = useCollected(activeHuntId);
 
   if (!player) return <Navigate to="/join" replace />;
   if (!hunt) return <Navigate to="/" replace />;

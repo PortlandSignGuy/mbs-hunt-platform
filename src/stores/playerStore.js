@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+/** Stable empty array — returned when no collection exists to avoid new ref per call */
+const EMPTY = [];
+
 export const usePlayerStore = create(
   persist(
     (set, get) => ({
@@ -41,9 +44,15 @@ export const usePlayerStore = create(
             },
           };
         }),
-
-      getCollected: (huntId) => get().collections[huntId] || [],
     }),
     { name: 'mbs-player' },
   ),
 );
+
+/**
+ * Hook to get collected stops for a hunt.
+ * Returns a stable reference (won't cause re-render loops).
+ */
+export function useCollected(huntId) {
+  return usePlayerStore((s) => s.collections[huntId] || EMPTY);
+}
