@@ -40,10 +40,15 @@ export default function Header() {
           ))}
 
           {player ? (
-            <span className="inline-flex items-center gap-1.5 bg-nature-100 text-nature-700 font-bold text-sm px-3 py-1.5 rounded-badge">
+            <button
+              onClick={() => usePlayerStore.getState().logout()}
+              className="inline-flex items-center gap-1.5 bg-nature-100 text-nature-700 font-bold text-sm px-3 py-1.5 rounded-badge hover:bg-joy-100 hover:text-joy-700 transition-colors"
+              title="Click to log out"
+            >
               <span className="w-2 h-2 bg-nature-400 rounded-full" />
               {player.name}
-            </span>
+              <span className="text-surface-400 ml-1 text-xs">✕</span>
+            </button>
           ) : (
             <Link
               to="/join"
@@ -89,10 +94,16 @@ export default function Header() {
           ))}
 
           {player ? (
-            <div className="flex items-center gap-2 px-4 py-3 text-nature-700 font-bold">
-              <span className="w-2 h-2 bg-nature-400 rounded-full" />
-              {player.name}
-            </div>
+            <button
+              onClick={() => { usePlayerStore.getState().logout(); setMenuOpen(false); }}
+              className="w-full flex items-center justify-between px-4 py-3 text-nature-700 font-bold hover:bg-joy-100 hover:text-joy-700 rounded-button transition-colors"
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-nature-400 rounded-full" />
+                {player.name}
+              </span>
+              <span className="text-surface-400 text-sm">Log out</span>
+            </button>
           ) : (
             <Link
               to="/join"
